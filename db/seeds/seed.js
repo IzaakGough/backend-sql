@@ -88,28 +88,38 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
                   votes,
                   article_img_url
                   )
-                  VALUES %L`, articleDataNest)
+                  VALUES %L
+                  RETURNING *;
+                  `, articleDataNest)
                   return db.query(articleFormat)
                 .then(result => {
+                  const data = result.rows.map(obj => [obj.article_id, obj.title]).flat()
                   const commentDataNew = commentData.map(obj => convertTimestampToDate(obj))
-                  const commentDataNest = commentDataNew.map(obj => [
-                    obj.article_id,
-                    obj.body,
-                    obj.votes,
-                    obj.author,
-                    obj.created_at
-                  ])
-                  const commentFormat = format(`
-                    INSERT INTO comments (
-                    article_id,
-                    body,
-                    votes,
-                    author,
-                    created_at
+                    const commentDataNest = commentDataNew.map(obj => 
+                      [
+                        data[data.indexOf(obj.article_title) - 1],
+                        obj.body,
+                        obj.votes,
+                        obj.author,
+                        obj.created_at
+                      ]
+
                     )
-                    VALUES %L`, commentDataNest)
-                    return db.query(commentFormat)
-                }) 
+                    const commentFormat = format(`                    
+                      INSERT INTO comments (
+                      article_id,
+                      body,
+                      votes,
+                      author,
+                      created_at
+                      )
+                      VALUES %L
+                      RETURNING *;
+                      `, commentDataNest)
+                      return db.query(commentFormat)
+                      //.then(result => console.log(result))
+              })
+    
               }
               )
             })

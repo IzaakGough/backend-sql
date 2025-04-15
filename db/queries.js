@@ -42,3 +42,12 @@ const db = require("./connection")
 //     WHERE votes > 10;
 //     `)
 //     .then(result => console.log(result.rows))
+
+
+return db.query(`
+    SELECT * FROM comments;
+    `)
+    .then(result => console.log(result))
+
+
+
