@@ -5,14 +5,14 @@ const format = require('pg-format')
 
 
 const seed = ({ topicData, userData, articleData, commentData }) => {
-  return db.query(`DROP TABLE IF EXISTS comments`)
+  return db.query(`DROP TABLE IF EXISTS comments;`)
   .then(result => {
-    return db.query(`DROP TABLE IF EXISTS articles`)
+    return db.query(`DROP TABLE IF EXISTS articles;`)
   })
   .then(result => {
-    return db.query(`DROP TABLE IF EXISTS users`)
+    return db.query(`DROP TABLE IF EXISTS users;`)
     .then(result => {
-      return db.query('DROP TABLE IF EXISTS topics')
+      return db.query('DROP TABLE IF EXISTS topics;')
     })
     .then(result => {
       return db.query(`CREATE TABLE topics 
@@ -21,7 +21,7 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
       description VARCHAR(100) NOT NULL,
       img_url VARCHAR(1000) NOT NULL
       )
-      `)
+      ;`)
       .then(result => {
         return db.query(`CREATE TABLE users
             (
@@ -29,7 +29,7 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
             name VARCHAR(100) NOT NULL,
             avatar_url VARCHAR(1000) NOT NULL
             )
-            `)
+            ;`)
       })
       .then(result => {
         return db.query(`CREATE TABLE articles
@@ -43,7 +43,7 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
           votes INT DEFAULT 0,
           article_img_url VARCHAR(1000) NOT NULL
           )
-          `)
+          ;`)
         .then(result => {
           return db.query(`CREATE TABLE comments
             (
@@ -54,7 +54,7 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
             author VARCHAR(100) REFERENCES users(username),
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
-            `)
+            ;`)
           .then(result => {
             const topicDataNest = topicData.map(obj => [obj.slug, obj.description, obj.img_url])
             const topicFormat = format(`
