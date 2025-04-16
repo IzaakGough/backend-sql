@@ -1,8 +1,6 @@
-const {convertTimestampToDate} = require("./utils")
+const {convertTimestampToDate, createRef} = require("./utils")
 const db = require("../connection")
 const format = require('pg-format')
-
-
 
 const seed = ({ topicData, userData, articleData, commentData }) => {
   return db.query(`DROP TABLE IF EXISTS comments;`)
@@ -48,7 +46,7 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
           return db.query(`CREATE TABLE comments
             (
             comment_id SERIAL PRIMARY KEY,
-            article_id INT REFERENCES articles(article_id),
+            article_id INT REFERENCES articles(article_id) NOT NULL,
             body TEXT NOT NULL,
             votes INT DEFAULT 0,
             author VARCHAR(100) REFERENCES users(username),
@@ -93,17 +91,16 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
                   `, articleDataNest)
                   return db.query(articleFormat)
                 .then(result => {
-                  const data = result.rows.map(obj => [obj.article_id, obj.title]).flat()
+                  const data = createRef(result.rows)
                   const commentDataNew = commentData.map(obj => convertTimestampToDate(obj))
-                    const commentDataNest = commentDataNew.map(obj => 
+                  const commentDataNest = commentDataNew.map(obj => 
                       [
-                        data[data.indexOf(obj.article_title) - 1],
+                        data[obj.article_title],
                         obj.body,
                         obj.votes,
                         obj.author,
                         obj.created_at
                       ]
-
                     )
                     const commentFormat = format(`                    
                       INSERT INTO comments (
@@ -117,9 +114,7 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
                       RETURNING *;
                       `, commentDataNest)
                       return db.query(commentFormat)
-                      //.then(result => console.log(result))
               })
-    
               }
               )
             })

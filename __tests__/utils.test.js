@@ -1,5 +1,6 @@
 const {
-  convertTimestampToDate
+  convertTimestampToDate,
+  createRef
 } = require("../db/seeds/utils");
 
 describe("convertTimestampToDate", () => {
@@ -37,4 +38,65 @@ describe("convertTimestampToDate", () => {
     expect(result).toEqual(expected);
   });
 });
+
+
+describe("createRef", () => {
+  test("Input of empty array returns an empty object", () => {
+    const input = []
+    const result = createRef(input)
+    expect(result).toEqual({})
+  })
+  test("Array contain a single article object returns required object", () => {
+    const input = [
+      {
+        article_id: 1,
+        title: "Living in the shadow of a great man",
+        topic: "mitch",
+        author: "butter_bridge",
+        body: "I find this existence challenging",
+        created_at: 1594329060000,
+        votes: 100,
+        article_img_url: "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+      }
+    ]
+    const result = createRef(input)
+    expect(result).toEqual({
+      "Living in the shadow of a great man": 1
+    })
+  })
+  test("Array containing multiple article objects returns required object", () => {
+    const input = [
+      {
+        article_id: 1,
+        title: "Living in the shadow of a great man",
+        topic: "mitch",
+        author: "butter_bridge",
+        body: "I find this existence challenging",
+        created_at: 1594329060000,
+        votes: 100,
+        article_img_url: "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+      },
+      {
+        article_id: 2,
+        title: "Eight pug gifs that remind me of mitch",
+        topic: "mitch",
+        author: "icellusedkars",
+        body: "some gifs",
+        created_at: 1604394720000,
+        votes: 0,
+        article_img_url:
+          "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+      },
+    ]
+    const result = createRef(input)
+    expect(result).toEqual({
+      "Living in the shadow of a great man": 1,
+      "Eight pug gifs that remind me of mitch": 2
+    })
+  })
+})
+
+
+
+
 

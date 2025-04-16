@@ -6,6 +6,13 @@ exports.convertTimestampToDate = ({ created_at, ...otherProperties }) => {
 };
 
 
-
+exports.createRef = (articles) => {
+  if (articles.length === 0){
+    return {}
+  }
+  let result = {}
+  articles.forEach(article => result[article.title] = article.article_id)
+  return result
+};
 
 
