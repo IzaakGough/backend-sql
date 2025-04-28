@@ -279,7 +279,7 @@ describe("PATCH /api/articles/:article_id", () => {
       expect(body).toEqual({msg: "Bad request"})
     })
   })
-  test.skip("400: Responds with error object when body given has incorrect value type", () => {
+  test("400: Responds with error object when body given has incorrect value type", () => {
     return request(app)
     .patch("/api/articles/1")
     .send({inc_votes: "one"})
@@ -288,7 +288,7 @@ describe("PATCH /api/articles/:article_id", () => {
       expect(body).toEqual({msg: "Bad request"})
     })
   })
-  test.skip("404: Responds with error object when given a valid ID which is not in the database", () => {
+  test("404: Responds with error object when given a valid ID which is not in the database", () => {
     return request(app)
     .patch("/api/articles/10000000")
     .send({inc_votes: 1})
@@ -297,7 +297,7 @@ describe("PATCH /api/articles/:article_id", () => {
       expect(body).toEqual({status: 404, msg: "Invalid ID"})
     })
   })
-  test.skip("400: Responds with error object when given an invalid ID", () => {
+  test("400: Responds with error object when given an invalid ID", () => {
     return request(app)
     .patch("/api/articles/notAnId")
     .send({inc_votes: 1})
