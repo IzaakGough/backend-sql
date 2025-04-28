@@ -59,5 +59,12 @@
         }
       ]
     }
+  },
+  "POST /api/articles/:article_id/comments" : {
+    "description": "posts a new comment and returns posted comment object",
+    "exampleResponse": {
+      "author": "butter_bridge",
+      "body": "test comment..."
+    }
   }
 }

@@ -7,7 +7,8 @@ const {
     getTopics,
     getArticle,
     getArticles,
-    getArticleComments
+    getArticleComments,
+    postArticleComment
 
 } = require("./controller/controller")
 
@@ -24,11 +25,19 @@ app.get("/api/articles", getArticles)
 
 app.get("/api/articles/:article_id/comments", getArticleComments)
 
+app.post("/api/articles/:article_id/comments", postArticleComment)
 
-// 400 error
+// 400 error - invalid id
 app.use((err, req, res, next) => {
     if (err.code === "22P02") {
         res.status(400).send({msg: "Bad request"})
+    } else next(err);
+})
+
+// 400 error - id out of range
+app.use((err, req, res, next) => {
+    if (err.code === "23503") {
+        res.status(404).send({msg: "ID out of range"})
     } else next(err);
 })
 
