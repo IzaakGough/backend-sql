@@ -17,7 +17,7 @@ exports.getDescription = (req, res, next) => {
 exports.getTopics = (req, res, next) => {
     return selectTopics()
     .then(({rows}) => {
-        res.status(200).send(rows)
+        res.status(200).send({topics: rows})
     })
 }
 
@@ -35,7 +35,7 @@ exports.getArticle = (req, res, next) => {
 exports.getArticles = (req, res, next) => {
     return selectArticles()
     .then(({rows}) => {
-        res.status(200).send(rows)
+        res.status(200).send({articles: rows})
     })
 }
 
@@ -43,7 +43,7 @@ exports.getArticleComments = (req, res, next) => {
     const {article_id} = req.params
     return selectArticleComments(article_id)
     .then(({rows}) => {
-        res.status(200).send(rows)
+        res.status(200).send({comments: rows})
     })
     .catch(err => {
         next(err)

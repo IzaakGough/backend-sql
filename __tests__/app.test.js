@@ -46,8 +46,8 @@ describe("GET /api/topics", () => {
     .get("/api/topics")
     .expect(200)
     .then(({body}) => {
-      expect(body.length).toBe(3)
-      body.forEach(obj => {
+      expect(body.topics.length).toBe(3)
+      body.topics.forEach(obj => {
         expect(typeof obj.slug).toBe("string")
         expect(typeof obj.description).toBe("string")
       })
@@ -100,8 +100,8 @@ describe("GET /api/articles", () => {
     .get("/api/articles")
     .expect(200)
     .then(({body}) => {
-      expect(body.length).toBe(13)
-        body.forEach(article => {
+      expect(body.articles.length).toBe(13)
+        body.articles.forEach(article => {
           expect(typeof article.author).toBe("string")
           expect(typeof article.title).toBe("string")
           expect(typeof article.article_id).toBe("number")
@@ -111,7 +111,7 @@ describe("GET /api/articles", () => {
           expect(typeof article.article_img_url).toBe("string")
           expect(typeof article.comment_count).toBe("string")
         })
-        expect(body).toBeSortedBy("created_at", {
+        expect(body.articles).toBeSortedBy("created_at", {
           descending: true
         })
     })
@@ -124,8 +124,8 @@ describe("GET /api/articles/:article_id/comments", () => {
     .get("/api/articles/1/comments")
     .expect(200)
     .then(({body}) => {
-      expect(body.length).toBe(11)
-      body.forEach(comment => {
+      expect(body.comments.length).toBe(11)
+      body.comments.forEach(comment => {
         expect(typeof comment.comment_id).toBe("number")
         expect(typeof comment.votes).toBe("number")
         expect(typeof comment.created_at).toBe("string")
@@ -133,7 +133,7 @@ describe("GET /api/articles/:article_id/comments", () => {
         expect(typeof comment.body).toBe("string")
         expect(typeof comment.article_id).toBe("number")
       })
-      expect(body).toBeSortedBy("created_at", {
+      expect(body.comments).toBeSortedBy("created_at", {
         descending: true
       })
     })
@@ -143,7 +143,7 @@ describe("GET /api/articles/:article_id/comments", () => {
     .get("/api/articles/2/comments")
     .expect(200)
     .then(({body}) => {
-      expect(body).toEqual([])
+      expect(body.comments).toEqual([])
     })
   })
   test("404: Responds with error object when given a valid ID which is not in the database", () => {
