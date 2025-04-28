@@ -215,13 +215,92 @@ describe("POST /api/articles/:article_id/comments", () => {
       expect(body).toEqual({msg: "Bad request"})
     })
   })
-  test.only("400: Responds with error object when given body with correct fields, but incorrect values", () => {
+  test("400: Responds with error object when given body with correct fields, but incorrect values", () => {
     return request(app)
     .post("/api/articles/1/comments")
     .send({
       username: 1,
       body: 1
     })
+    .expect(400)
+    .then(({body}) => {
+      expect(body).toEqual({msg: "Bad request"})
+    })
+  })
+})
+
+describe("PATCH /api/articles/:article_id", () => {
+  test.skip("200: Responds with updated article object when given positive number", () => {
+    return request(app)
+    .patch("/api/articles/1")
+    .send({inc_votes: 2})
+    .expect(200)
+    .then(({body}) => {
+      expect(body).toEqual( 
+        {
+          article_id: 1,
+          title: 'Living in the shadow of a great man',
+          topic: 'mitch',
+          author: 'butter_bridge',
+          body: 'I find this existence challenging',
+          created_at: "2020-07-09T20:11:00.000Z",
+          votes: 102,
+          article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
+        }
+      )
+    })
+  })
+  test.skip("200: Responds with updated article object when given negative number", () => {
+    return request(app)
+    .patch("/api/articles/1")
+    .send({inc_votes: -2})
+    .expect(200)
+    .then(({body}) => {
+      expect(body).toEqual( 
+        {
+          article_id: 1,
+          title: 'Living in the shadow of a great man',
+          topic: 'mitch',
+          author: 'butter_bridge',
+          body: 'I find this existence challenging',
+          created_at: "2020-07-09T20:11:00.000Z",
+          votes: 98,
+          article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
+        }
+      )
+    })
+  })
+  test.skip("400: Responds with error object when body given has incorrect fields", () => {
+    return request(app)
+    .patch("/api/articles/1")
+    .send({})
+    .expect(400)
+    .then(({body}) => {
+      expect(body).toEqual({msg: "Bad request"})
+    })
+  })
+  test.skip("400: Responds with error object when body given has incorrect value type", () => {
+    return request(app)
+    .patch("/api/articles/1")
+    .send({inc_votes: "one"})
+    .expect(400)
+    .then(({body}) => {
+      expect(body).toEqual({msg: "Bad request"})
+    })
+  })
+  test.skip("404: Responds with error object when given a valid ID which is not in the database", () => {
+    return request(app)
+    .patch("/api/articles/10000000")
+    .send({inc_votes: 1})
+    .expect(404)
+    .then(({body}) => {
+      expect(body).toEqual({status: 404, msg: "Invalid ID"})
+    })
+  })
+  test.skip("400: Responds with error object when given an invalid ID", () => {
+    return request(app)
+    .patch("/api/articles/notAnId")
+    .send({inc_votes: 1})
     .expect(400)
     .then(({body}) => {
       expect(body).toEqual({msg: "Bad request"})

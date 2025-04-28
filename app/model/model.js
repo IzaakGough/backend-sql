@@ -94,6 +94,31 @@ exports.insertArticleComment = (id, username, created_at, body) => {
     , [id, username, created_at, body])
 }
 
+exports.updateArticle = (id, incVotes) => {
+    return db.query(
+        `
+        SELECT * FROM articles
+        WHERE article_id = $1;
+        `
+    , [id])
+    .then(({rows}) => {
+        if (!rows.length) {
+            return Promise.reject({
+                status: 404,
+                msg: "Invalid ID"
+            })
+        } else {
+            return db.query(
+                `
+                UPDATE articles
+                SET votes = votes + $2
+                WHERE article_id = $1
+                RETURNING *;
+                `
+            , [id, incVotes])
+        }
+    })
+}
 
 
 
