@@ -167,7 +167,7 @@ describe("GET /api/articles/:article_id/comments", () => {
 })
 
 describe("POST /api/articles/:article_id/comments", () => {
-  test.skip("201: Responds with posted comment object", () => {
+  test("201: Responds with posted comment object", () => {
     return request(app)
     .post("/api/articles/1/comments")
     .send({
@@ -182,9 +182,9 @@ describe("POST /api/articles/:article_id/comments", () => {
       })
     })
   })
-  test.skip("404: Responds with error object when given a valid ID which is not in the database", () => {
+  test("404: Responds with error object when given a valid ID which is not in the database", () => {
     return request(app)
-    .get("/api/articles/10000000/comments")
+    .post("/api/articles/10000000/comments")
     .expect(404)
     .then(({body}) => {
       expect(body).toEqual({
@@ -192,9 +192,9 @@ describe("POST /api/articles/:article_id/comments", () => {
         msg: "Invalid ID"})
     })
   })
-  test.skip("400: Responds with error object when given an invalid ID", () => {
+  test("400: Responds with error object when given an invalid ID", () => {
     return request(app)
-    .get("/api/articles/notAnId/comments")
+    .post("/api/articles/notAnId/comments")
     .expect(400)
     .then(({body}) => {
       expect(body).toEqual({msg: "Bad request"})
