@@ -3,7 +3,9 @@ const app = express();
 const db = require("../db/connection")
 
 const {
-    getDescription
+    getDescription,
+    getTopics
+
 } = require("./controller/controller")
 
 app.use(express.json())
@@ -11,8 +13,7 @@ app.use(express.json())
 
 app.get("/api", getDescription)
 
-
-
+app.get("/api/topics", getTopics)
 
 
 
