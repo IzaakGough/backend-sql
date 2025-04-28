@@ -41,4 +41,13 @@ describe("GET /api/topics", () => {
       })
     })
   })
+  test.only("404: Responds with error object if non-existent endpoint given", () => {
+    return request(app)
+    .get("/notARoute")
+    .expect(404)
+    .then(({body}) => {
+      expect(body).toEqual({status: 404, msg: "Non-existent endpoint"})
+    })
+  })
+
 })
