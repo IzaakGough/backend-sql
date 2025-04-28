@@ -206,4 +206,25 @@ describe("POST /api/articles/:article_id/comments", () => {
       expect(body).toEqual({msg: "Bad request"})
     })
   })
+  test("400: Responds with error object when given body with incorrect fields", () => {
+    return request(app)
+    .post("/api/articles/1/comments")
+    .send({})
+    .expect(400)
+    .then(({body}) => {
+      expect(body).toEqual({msg: "Bad request"})
+    })
+  })
+  test.only("400: Responds with error object when given body with correct fields, but incorrect values", () => {
+    return request(app)
+    .post("/api/articles/1/comments")
+    .send({
+      username: 1,
+      body: 1
+    })
+    .expect(400)
+    .then(({body}) => {
+      expect(body).toEqual({msg: "Bad request"})
+    })
+  })
 })
