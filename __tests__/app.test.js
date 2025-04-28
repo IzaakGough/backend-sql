@@ -95,7 +95,7 @@ describe("GET /api/articles/:article_id", () => {
 })
 
 describe("GET /api/articles", () => {
-  test.only("200: Responds with an array of all article objects", () => {
+  test("200: Responds with an array of all article objects", () => {
     return request(app)
     .get("/api/articles")
     .expect(200)
@@ -114,6 +114,54 @@ describe("GET /api/articles", () => {
         expect(body).toBeSortedBy("created_at", {
           descending: true
         })
+    })
+  })
+})
+
+describe("GET /api/articles/:article_id/comments", () => {
+  test("200: Responds with array of comment objects for article with corresponding id", () => {
+    return request(app)
+    .get("/api/articles/1/comments")
+    .expect(200)
+    .then(({body}) => {
+      expect(body.length).toBe(11)
+      body.forEach(comment => {
+        expect(typeof comment.comment_id).toBe("number")
+        expect(typeof comment.votes).toBe("number")
+        expect(typeof comment.created_at).toBe("string")
+        expect(typeof comment.author).toBe("string")
+        expect(typeof comment.body).toBe("string")
+        expect(typeof comment.article_id).toBe("number")
+      })
+      expect(body).toBeSortedBy("created_at", {
+        descending: true
+      })
+    })
+  })
+  test("200: Responds with an empty array when given valid article which has no comments", () => {
+    return request(app)
+    .get("/api/articles/2/comments")
+    .expect(200)
+    .then(({body}) => {
+      expect(body).toEqual([])
+    })
+  })
+  test("404: Responds with error object when given a valid ID which is not in the database", () => {
+    return request(app)
+    .get("/api/articles/10000000/comments")
+    .expect(404)
+    .then(({body}) => {
+      expect(body).toEqual({
+        status: 404,
+        msg: "Invalid ID"})
+    })
+  })
+  test("400: Responds with error object when given an invalid ID", () => {
+    return request(app)
+    .get("/api/articles/notAnId/comments")
+    .expect(400)
+    .then(({body}) => {
+      expect(body).toEqual({msg: "Bad request"})
     })
   })
 })
