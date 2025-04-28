@@ -82,11 +82,17 @@ exports.selectArticleComments = (id) => {
     })
 }
 
-exports.insertArticleComment = (id) => {
+exports.insertArticleComment = (id, username, created_at, body) => {
+    return db.query(
+        `
+        INSERT INTO comments
+        (article_id, author, created_at, body)
+        VALUES 
+        ($1, $2, $3, $4)
+        RETURNING author, body;
+        `
+    , [id, username, created_at, body])
 }
-
-
-
 
 
 
