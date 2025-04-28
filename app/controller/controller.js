@@ -34,7 +34,6 @@ exports.getArticle = (req, res, next) => {
 exports.getArticles = (req, res, next) => {
     return selectArticles()
     .then(({rows}) => {
-        console.log(rows)
         res.status(200).send(rows)
     })
 }
