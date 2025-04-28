@@ -270,7 +270,7 @@ describe("PATCH /api/articles/:article_id", () => {
       )
     })
   })
-  test.skip("400: Responds with error object when body given has incorrect fields", () => {
+  test("400: Responds with error object when body given has incorrect fields", () => {
     return request(app)
     .patch("/api/articles/1")
     .send({})
