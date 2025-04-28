@@ -6,7 +6,8 @@ const {
     selectArticle,
     selectArticles,
     selectArticleComments,
-    insertArticleComment
+    insertArticleComment,
+    updateArticle
 
 } = require("../model/model")
 
@@ -66,5 +67,24 @@ exports.postArticleComment = (req, res, next) => {
             next(err)
         })
     }
+}
+
+exports.patchArticle = (req, res, next) => {
+    const {article_id} = req.params
+    const {inc_votes} = req.body
+    if (!inc_votes || !(typeof inc_votes === "number")) {
+        res.status(400).send({msg: "Bad request"})
+    } else {
+        return updateArticle(article_id, inc_votes)
+        .then(({rows}) => {
+            res.status(200).send(rows[0])
+        })
+        .catch(err => {
+            next(err)
+        })
+    }
+
+    
+
 }
 

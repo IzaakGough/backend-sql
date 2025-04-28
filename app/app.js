@@ -8,7 +8,8 @@ const {
     getArticle,
     getArticles,
     getArticleComments,
-    postArticleComment
+    postArticleComment,
+    patchArticle
 
 } = require("./controller/controller")
 
@@ -26,6 +27,8 @@ app.get("/api/articles", getArticles)
 app.get("/api/articles/:article_id/comments", getArticleComments)
 
 app.post("/api/articles/:article_id/comments", postArticleComment)
+
+app.patch("/api/articles/:article_id", patchArticle)
 
 // 400 error - invalid id
 app.use((err, req, res, next) => {
