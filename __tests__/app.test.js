@@ -230,7 +230,7 @@ describe("POST /api/articles/:article_id/comments", () => {
 })
 
 describe("PATCH /api/articles/:article_id", () => {
-  test.skip("200: Responds with updated article object when given positive number", () => {
+  test("200: Responds with updated article object when given positive number", () => {
     return request(app)
     .patch("/api/articles/1")
     .send({inc_votes: 2})
