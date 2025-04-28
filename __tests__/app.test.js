@@ -6,6 +6,7 @@ const data = require("../db/data/test-data")
 const app = require("../app/app")
 const request = require("supertest")
 const {convertTimestampToDate} = require("../db/seeds/utils")
+require("jest-sorted")
 
 /* Set up your beforeEach & afterAll functions here */
 
@@ -93,3 +94,26 @@ describe("GET /api/articles/:article_id", () => {
   })
 })
 
+describe("GET /api/articles", () => {
+  test.only("200: Responds with an array of all article objects", () => {
+    return request(app)
+    .get("/api/articles")
+    .expect(200)
+    .then(({body}) => {
+      expect(body.length).toBe(13)
+        body.forEach(article => {
+          expect(typeof article.author).toBe("string")
+          expect(typeof article.title).toBe("string")
+          expect(typeof article.article_id).toBe("number")
+          expect(typeof article.topic).toBe("string")
+          expect(typeof article.created_at).toBe("string")
+          expect(typeof article.votes).toBe("number")
+          expect(typeof article.article_img_url).toBe("string")
+          expect(typeof article.comment_count).toBe("string")
+        })
+        expect(body).toBeSortedBy("created_at", {
+          descending: true
+        })
+    })
+  })
+})
