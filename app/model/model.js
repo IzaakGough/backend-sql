@@ -58,7 +58,6 @@ exports.selectArticles = () => {
 }
 
 exports.selectArticleComments = (id) => {
-
     return db.query(
         `
         SELECT * FROM articles
@@ -81,6 +80,9 @@ exports.selectArticleComments = (id) => {
             , [id])
         }
     })
+}
+
+exports.insertArticleComment = (id) => {
 }
 
 

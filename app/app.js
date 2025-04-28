@@ -7,7 +7,8 @@ const {
     getTopics,
     getArticle,
     getArticles,
-    getArticleComments
+    getArticleComments,
+    postArticleComment
 
 } = require("./controller/controller")
 
@@ -24,6 +25,7 @@ app.get("/api/articles", getArticles)
 
 app.get("/api/articles/:article_id/comments", getArticleComments)
 
+app.post("/api/articles/:article_id/comments", postArticleComment)
 
 // 400 error
 app.use((err, req, res, next) => {

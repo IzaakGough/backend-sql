@@ -5,7 +5,8 @@ const {
     selectTopics,
     selectArticle,
     selectArticles,
-    selectArticleComments
+    selectArticleComments,
+    insertArticleComment
 
 } = require("../model/model")
 
@@ -49,3 +50,11 @@ exports.getArticleComments = (req, res, next) => {
         next(err)
     })
 }
+
+exports.postArticleComment = (req, res, next) => {
+    const {article_id} = req.params
+    return insertArticleComment(article_id)
+    .then(({rows}) => {
+    })
+}
+
