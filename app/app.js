@@ -5,7 +5,8 @@ const db = require("../db/connection")
 const {
     getDescription,
     getTopics,
-    getArticle
+    getArticle,
+    getArticles
 
 } = require("./controller/controller")
 
@@ -17,6 +18,8 @@ app.get("/api", getDescription)
 app.get("/api/topics", getTopics)
 
 app.get("/api/articles/:article_id", getArticle)
+
+app.get("/api/articles", getArticles)
 
 
 

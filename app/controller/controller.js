@@ -3,7 +3,9 @@ const endpoints = require("../../endpoints.json")
 
 const {
     selectTopics,
-    selectArticle
+    selectArticle,
+    selectArticles
+
 } = require("../model/model")
 
 
@@ -26,5 +28,13 @@ exports.getArticle = (req, res, next) => {
     })
     .catch(err => {
         next(err)
+    })
+}
+
+exports.getArticles = (req, res, next) => {
+    return selectArticles()
+    .then(({rows}) => {
+        console.log(rows)
+        res.status(200).send(rows)
     })
 }
