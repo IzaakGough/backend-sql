@@ -167,7 +167,7 @@ describe("GET /api/articles/:article_id/comments", () => {
 })
 
 describe("POST /api/articles/:article_id/comments", () => {
-  test.only("201: Responds with posted comment object when given username of user in database", () => {
+  test("201: Responds with posted comment object when given username of user in database", () => {
     return request(app)
     .post("/api/articles/1/comments")
     .send({
@@ -182,7 +182,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       })
     })
   })
-  test.only("404: Responds with error object when given a valid ID which is not in the database", () => {
+  test("404: Responds with error object when given a valid ID which is not in the database", () => {
     return request(app)
     .post("/api/articles/10000000/comments")
     .send({
@@ -194,7 +194,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       expect(body).toEqual({msg: "ID out of range"})
     })
   })
-  test.only("400: Responds with error object when given an invalid ID", () => {
+  test("400: Responds with error object when given an invalid ID", () => {
     return request(app)
     .post("/api/articles/notAnId/comments")
     .send({
