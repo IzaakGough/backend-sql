@@ -95,7 +95,7 @@ describe("GET /api/articles/:article_id", () => {
 })
 
 describe("GET /api/articles", () => {
-  test.only("200: Responds with an array of all article objects", () => {
+  test("200: Responds with an array of all article objects", () => {
     return request(app)
     .get("/api/articles")
     .expect(200)
