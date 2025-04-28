@@ -6,7 +6,8 @@ const {
     getDescription,
     getTopics,
     getArticle,
-    getArticles
+    getArticles,
+    getArticleComments
 
 } = require("./controller/controller")
 
@@ -21,6 +22,7 @@ app.get("/api/articles/:article_id", getArticle)
 
 app.get("/api/articles", getArticles)
 
+app.get("/api/articles/:article_id/comments", getArticleComments)
 
 
 // 400 error

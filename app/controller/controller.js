@@ -4,7 +4,8 @@ const endpoints = require("../../endpoints.json")
 const {
     selectTopics,
     selectArticle,
-    selectArticles
+    selectArticles,
+    selectArticleComments
 
 } = require("../model/model")
 
@@ -35,5 +36,16 @@ exports.getArticles = (req, res, next) => {
     return selectArticles()
     .then(({rows}) => {
         res.status(200).send(rows)
+    })
+}
+
+exports.getArticleComments = (req, res, next) => {
+    const {article_id} = req.params
+    return selectArticleComments(article_id)
+    .then(({rows}) => {
+        res.status(200).send(rows)
+    })
+    .catch(err => {
+        next(err)
     })
 }
