@@ -350,3 +350,54 @@ describe("GET /api/users", () => {
     })
   })
 })
+
+describe("GET /api/articles (sorting queries)", () => {
+  test("200: Responds with articles sorted and ordered by given queries", () => {
+    return request(app)
+    .get("/api/articles?sort_by=article_id&order=asc")
+    .expect(200)
+    .then(({body}) => {
+      expect(body.articles.length).toBe(13)
+      body.articles.forEach(article => {
+        expect(typeof article.author).toBe("string")
+        expect(typeof article.title).toBe("string")
+        expect(typeof article.article_id).toBe("number")
+        expect(typeof article.topic).toBe("string")
+        expect(typeof article.created_at).toBe("string")
+        expect(typeof article.votes).toBe("number")
+        expect(typeof article.article_img_url).toBe("string")
+        expect(typeof article.comment_count).toBe("number")
+        })
+        expect(body.articles).toBeSortedBy("article_id", {
+          descending: false
+        })
+    })
+  })
+  test("400: Responds with error object when given invalid sort_by query", () => {
+    return request(app)
+    .get("/api/articles?sort_by=cheese&order=asc")
+    .expect(400)
+    .then(({body}) => {
+      expect(body).toEqual(
+        {
+          status: 400,
+          msg: "Invalid query"
+        }
+      )
+    })
+  })
+  test("400: Responds with error object when given invalid order query", () => {
+    return request(app)
+    .get("/api/articles?sort_by=article_id&order=cheese")
+    .expect(400)
+    .then(({body}) => {
+      expect(body).toEqual(
+        {
+          status: 400,
+          msg: "Invalid query"
+          
+        }
+      )
+    })
+  })
+})

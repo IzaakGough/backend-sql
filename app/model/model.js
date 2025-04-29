@@ -29,31 +29,71 @@ exports.selectArticle = (id) => {
     })
 }
 
-exports.selectArticles = () => {
+exports.selectArticles = (sortQuery, orderQuery) => {
+    let queryStr = `
+    SELECT
+    articles.author,
+    articles.title,
+    articles.article_id,
+    articles.topic,
+    articles.created_at,
+    articles.votes,
+    articles.article_img_url,
+    COUNT(comments.comment_id)::INT AS comment_count
+    FROM articles
+    LEFT JOIN 
+    comments ON articles.article_id = comments.article_id
+    GROUP BY 
+    articles.author,
+    articles.title,
+    articles.article_id,
+    articles.topic,
+    articles.created_at,
+    articles.votes,
+    articles.article_img_url
+    ORDER BY
+    `
+    const validCols = 
+
+    [
+        "author",
+        "title",
+        "article_id",
+        "body",
+        "topic",
+        "created_at",
+        "votes",
+        "article_img_url"
+    ]
+
+    const validOrders = ["ASC", "DESC"]
+
+    let sort_by = "created_at"
+    let order = "DESC"
+
+    if (sortQuery && validCols.includes(sortQuery)) {
+        sort_by = sortQuery
+    } else if (sortQuery && !validCols.includes(sortQuery)) {
+        return Promise.reject({
+            status: 400,
+            msg: "Invalid query"
+        })
+    } 
+
+    if (orderQuery && validOrders.includes(orderQuery.toUpperCase())) {
+        order = orderQuery
+    } else if (orderQuery && !validOrders.includes(orderQuery.toUpperCase())) {
+        return Promise.reject({
+            status: 400,
+            msg: "Invalid query"
+        })
+    }
+    
+    queryStr += ` ${sort_by}`
+    queryStr += ` ${order.toUpperCase()};`
+
     return db.query(
-        `
-        SELECT
-        articles.author,
-        articles.title,
-        articles.article_id,
-        articles.topic,
-        articles.created_at,
-        articles.votes,
-        articles.article_img_url,
-        COUNT(comments.comment_id)::INT AS comment_count
-        FROM articles
-        LEFT JOIN 
-        comments ON articles.article_id = comments.article_id
-        GROUP BY 
-        articles.author,
-        articles.title,
-        articles.article_id,
-        articles.topic,
-        articles.created_at,
-        articles.votes,
-        articles.article_img_url
-        ORDER BY articles.created_at DESC;
-        `
+        queryStr
     )
 }
 
