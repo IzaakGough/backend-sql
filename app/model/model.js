@@ -1,4 +1,5 @@
 const db = require("../../db/connection")
+const { sort } = require("../../db/data/test-data/articles")
 
 
 exports.selectTopics = () => {
@@ -37,6 +38,7 @@ exports.selectArticle = (id) => {
 }
 
 exports.selectArticles = (queries) => {
+
     let queryStr = ``
 
     let queryStrFirst = 
@@ -52,17 +54,17 @@ exports.selectArticles = (queries) => {
     LEFT JOIN 
     comments ON articles.article_id = comments.article_id
     `
-
     let queryStrSecond = 
     `GROUP BY 
-    articles.author,
-    articles.title,
-    articles.article_id,
-    articles.topic,
-    articles.created_at,
-    articles.votes,
-    articles.article_img_url
-    `
+        articles.author,
+        articles.title,
+        articles.article_id,
+        articles.topic,
+        articles.created_at,
+        articles.votes,
+        articles.article_img_url
+        `
+
 
     const queryArr = []
     const validCols = 
@@ -83,12 +85,6 @@ exports.selectArticles = (queries) => {
     let sort_by = "created_at"
     let order = "DESC"
 
-    if (queries.topic) {
-        queryArr.push(queries.topic)
-        queryStr = queryStrFirst + " WHERE articles.topic = $1 " + queryStrSecond
-    } else {
-        queryStr= queryStrFirst + queryStrSecond
-    }
 
     if (queries.sort_by && validCols.includes(queries.sort_by)) {
         sort_by = queries.sort_by
@@ -107,12 +103,38 @@ exports.selectArticles = (queries) => {
             msg: "Invalid query"
         })
     }
-    
-    queryStr += `ORDER BY ${sort_by}`
-    queryStr += ` ${order.toUpperCase()};`
 
-    return db.query(queryStr, queryArr)
+    if (queries.topic) {
+        console.log(queries.topic)
+        return db.query(
+            `
+            SELECT * FROM topics
+            WHERE slug = $1
+            `
+        , [queries.topic])
+        .then(({rows}) => {
+            console.log(rows)
+            if (!rows.length) {
+                return Promise.reject({status: 404, msg: "Topic does not exist"})
+            } else {
+                queryArr.push(queries.topic)
+                queryStr += queryStrFirst + ` WHERE articles.topic = $1 ` + queryStrSecond
+                queryStr += `ORDER BY ${sort_by} ${order.toUpperCase()};`
+                console.log(queryStr)
+                return db.query(queryStr, queryArr)
+            }
+        })
+    } else {
+        queryStr += queryStrFirst + queryStrSecond
+        queryStr += `ORDER BY ${sort_by} ${order.toUpperCase()};`
+        console.log(queryStr)
+        return db.query(queryStr)
+    }
 }
+
+
+
+
 
 exports.selectArticleComments = (id) => {
     return db.query(

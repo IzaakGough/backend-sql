@@ -40,9 +40,11 @@ exports.getArticles = (req, res, next) => {
     const {sort_by, order, topic} = req.query
     return selectArticles({sort_by, order, topic})
     .then(({rows}) => {
+       
         res.status(200).send({articles: rows})
     })
     .catch(err => {
+        
         next(err)
     })
 }

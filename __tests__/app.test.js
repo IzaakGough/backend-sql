@@ -436,9 +436,20 @@ describe("GET /api/articles (topic query)", () => {
         })
     })
   })
-  test("200: Responds with an empty array if there are no articles with the given topic", () => {
+  test("404: Responds with an error object if given a topic not in the database", () => {
     return request(app)
     .get("/api/articles?topic=cheese")
+    .expect(404)
+    .then(({body}) => {
+      expect(body).toEqual({
+        status: 404,
+        msg: "Topic does not exist"
+      })
+    })
+  })
+  test("200: Responds with an empty array if given a valid topic with no articles", () => {
+    return request(app)
+    .get("/api/articles?topic=paper")
     .expect(200)
     .then(({body}) => {
       expect(body.articles).toEqual([])
