@@ -307,3 +307,30 @@ describe("PATCH /api/articles/:article_id", () => {
     })
   })
 })
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test("204: Responds with no content", () => {
+    return request(app)
+    .delete("/api/comments/1")
+    .expect(204)
+    .then(({body}) => {
+      expect(body).toEqual({})
+    })
+  })
+  test("404: Responds with error object when given a valid ID which is not in the database", () => {
+    return request(app)
+    .delete("/api/comments/10000000")
+    .expect(404)
+    .then(({body}) => {
+      expect(body).toEqual({status: 404, msg: "Invalid ID"})
+    })
+  })
+  test("400: Responds with error object when given an invalid ID", () => {
+    return request(app)
+    .delete("/api/comments/notAnId")
+    .expect(400)
+    .then(({body}) => {
+      expect(body).toEqual({msg: "Bad request"})
+    })
+  })
+})
