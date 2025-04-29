@@ -53,7 +53,7 @@ app.use((err, req, res, next) => {
 // 404 error
 app.use((err, req, res, next) => {
     if (err.status && err.msg) {
-        res.status(err.status).send({status: 404, msg: err.msg});
+        res.status(err.status).send({status: err.status, msg: err.msg});
     } else next(err);
 })
 
