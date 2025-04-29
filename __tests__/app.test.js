@@ -72,7 +72,6 @@ describe("GET /api/articles/:article_id", () => {
       expect(body.article_img_url).toBe(
         "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
       )
-      expect(body.comment_count).toBe(11)
     })
   })
   test("404: Responds with error object when given a valid ID which is not in the database", () => {
@@ -464,6 +463,27 @@ describe("GET /api/articles (topic query)", () => {
       expect(body.articles).toBeSortedBy("article_id", {
         descending: false
       })
+    })
+  })
+})
+
+describe("GET /api/articles/:article_id (comment_count)", () => {
+  test("200: Responds with the article object corresponding to the given article_id", () => {
+    return request(app)
+    .get("/api/articles/1")
+    .expect(200)
+    .then(({body}) => {
+      expect(body.author).toBe("butter_bridge")
+      expect(body.title).toBe("Living in the shadow of a great man")
+      expect(body.article_id).toBe(1)
+      expect(body.body).toBe("I find this existence challenging")
+      expect(body.topic).toBe("mitch")
+      expect(body.created_at).toBe("2020-07-09T20:11:00.000Z")
+      expect(body.votes).toBe(100)
+      expect(body.article_img_url).toBe(
+        "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
+      )
+      expect(body.comment_count).toBe(11)
     })
   })
 })
