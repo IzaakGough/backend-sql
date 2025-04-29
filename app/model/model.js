@@ -36,27 +36,11 @@ exports.selectArticle = (id) => {
     })
 }
 
-
-
-
-
-// `
-//         SELECT * FROM articles
-//         WHERE article_id = $1
-//         ;`
-
-
-
-
-
-
-
-
 exports.selectArticles = (queries) => {
+    let queryStr = ``
 
-    let queryStr = `
-    SELECT
-    articles.author,
+    let queryStrFirst = 
+    `SELECT articles.author,
     articles.title,
     articles.article_id,
     articles.topic,
@@ -67,7 +51,10 @@ exports.selectArticles = (queries) => {
     FROM articles
     LEFT JOIN 
     comments ON articles.article_id = comments.article_id
-    GROUP BY 
+    `
+
+    let queryStrSecond = 
+    `GROUP BY 
     articles.author,
     articles.title,
     articles.article_id,
@@ -76,6 +63,7 @@ exports.selectArticles = (queries) => {
     articles.votes,
     articles.article_img_url
     `
+
     const queryArr = []
     const validCols = 
 
@@ -95,11 +83,11 @@ exports.selectArticles = (queries) => {
     let sort_by = "created_at"
     let order = "DESC"
 
-    //console.log(queryStr[317])
-
     if (queries.topic) {
         queryArr.push(queries.topic)
-        queryStr = queryStr.slice(0,317) + "WHERE articles.topic = $1" + queryStr.slice(317,) 
+        queryStr = queryStrFirst + " WHERE articles.topic = $1 " + queryStrSecond
+    } else {
+        queryStr= queryStrFirst + queryStrSecond
     }
 
     if (queries.sort_by && validCols.includes(queries.sort_by)) {
@@ -123,9 +111,7 @@ exports.selectArticles = (queries) => {
     queryStr += `ORDER BY ${sort_by}`
     queryStr += ` ${order.toUpperCase()};`
 
-    return db.query(
-        queryStr
-    , queryArr)
+    return db.query(queryStr, queryArr)
 }
 
 exports.selectArticleComments = (id) => {
