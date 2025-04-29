@@ -72,6 +72,7 @@ describe("GET /api/articles/:article_id", () => {
       expect(body.article_img_url).toBe(
         "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
       )
+      expect(body.comment_count).toBe(11)
     })
   })
   test("404: Responds with error object when given a valid ID which is not in the database", () => {
