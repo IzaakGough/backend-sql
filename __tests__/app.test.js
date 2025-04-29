@@ -401,3 +401,53 @@ describe("GET /api/articles (sorting queries)", () => {
     })
   })
 })
+
+describe("GET /api/articles (topic query)", () => {
+  test("200: Responds with articles filtered by topic given", () => {
+    return request(app)
+    .get("/api/articles?topic=mitch")
+    .expect(200)
+    .then(({body}) => {
+      expect(body.articles.length).toBe(12)
+      body.articles.forEach(article => {
+        expect(typeof article.author).toBe("string")
+        expect(typeof article.title).toBe("string")
+        expect(typeof article.article_id).toBe("number")
+        expect(article.topic).toBe("mitch")
+        expect(typeof article.created_at).toBe("string")
+        expect(typeof article.votes).toBe("number")
+        expect(typeof article.article_img_url).toBe("string")
+        expect(typeof article.comment_count).toBe("number")
+        })
+    })
+  })
+  test("200: Responds with an empty array if there are no articles with the given topic", () => {
+    return request(app)
+    .get("/api/articles?topic=cheese")
+    .expect(200)
+    .then(({body}) => {
+      expect(body.articles).toEqual([])
+    })
+  })
+  test("200: Topic query works when chained with sort_by and order queries", () => {
+    return request(app)
+    .get("/api/articles?topic=mitch&sort_by=article_id&order=asc")
+    .expect(200)
+    .then(({body}) => {
+      expect(body.articles.length).toBe(12)
+      body.articles.forEach(article => {
+        expect(typeof article.author).toBe("string")
+        expect(typeof article.title).toBe("string")
+        expect(typeof article.article_id).toBe("number")
+        expect(article.topic).toBe("mitch")
+        expect(typeof article.created_at).toBe("string")
+        expect(typeof article.votes).toBe("number")
+        expect(typeof article.article_img_url).toBe("string")
+        expect(typeof article.comment_count).toBe("number")
+        })
+      expect(body.articles).toBeSortedBy("article_id", {
+        descending: false
+      })
+    })
+  })
+})

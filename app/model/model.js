@@ -29,7 +29,8 @@ exports.selectArticle = (id) => {
     })
 }
 
-exports.selectArticles = (sortQuery, orderQuery) => {
+exports.selectArticles = (queries) => {
+
     let queryStr = `
     SELECT
     articles.author,
@@ -51,8 +52,8 @@ exports.selectArticles = (sortQuery, orderQuery) => {
     articles.created_at,
     articles.votes,
     articles.article_img_url
-    ORDER BY
     `
+    const queryArr = []
     const validCols = 
 
     [
@@ -71,30 +72,37 @@ exports.selectArticles = (sortQuery, orderQuery) => {
     let sort_by = "created_at"
     let order = "DESC"
 
-    if (sortQuery && validCols.includes(sortQuery)) {
-        sort_by = sortQuery
-    } else if (sortQuery && !validCols.includes(sortQuery)) {
+    //console.log(queryStr[317])
+
+    if (queries.topic) {
+        queryArr.push(queries.topic)
+        queryStr = queryStr.slice(0,317) + "WHERE articles.topic = $1" + queryStr.slice(317,) 
+    }
+
+    if (queries.sort_by && validCols.includes(queries.sort_by)) {
+        sort_by = queries.sort_by
+    } else if (queries.sort_by && !validCols.includes(queries.sort_by)) {
         return Promise.reject({
             status: 400,
             msg: "Invalid query"
         })
     } 
 
-    if (orderQuery && validOrders.includes(orderQuery.toUpperCase())) {
-        order = orderQuery
-    } else if (orderQuery && !validOrders.includes(orderQuery.toUpperCase())) {
+    if (queries.order && validOrders.includes(queries.order.toUpperCase())) {
+        order = queries.order
+    } else if (queries.order && !validOrders.includes(queries.order.toUpperCase())) {
         return Promise.reject({
             status: 400,
             msg: "Invalid query"
         })
     }
     
-    queryStr += ` ${sort_by}`
+    queryStr += `ORDER BY ${sort_by}`
     queryStr += ` ${order.toUpperCase()};`
 
     return db.query(
         queryStr
-    )
+    , queryArr)
 }
 
 exports.selectArticleComments = (id) => {
