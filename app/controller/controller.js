@@ -8,7 +8,8 @@ const {
     selectArticleComments,
     insertArticleComment,
     updateArticle,
-    deleteCommentRecord
+    deleteCommentRecord,
+    selectUsers
 
 } = require("../model/model")
 
@@ -91,6 +92,16 @@ exports.deleteComment = (req, res, next) => {
     return deleteCommentRecord(comment_id)
     .then(() => {
         res.status(204).send({})
+    })
+    .catch(err => {
+        next(err)
+    })
+}
+
+exports.getUsers = (req, res, next) => {
+    return selectUsers()
+    .then(({rows}) => {
+        res.status(200).send({users: rows})
     })
     .catch(err => {
         next(err)

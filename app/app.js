@@ -10,7 +10,8 @@ const {
     getArticleComments,
     postArticleComment,
     patchArticle,
-    deleteComment
+    deleteComment,
+    getUsers
 
 } = require("./controller/controller")
 
@@ -32,6 +33,8 @@ app.post("/api/articles/:article_id/comments", postArticleComment)
 app.patch("/api/articles/:article_id", patchArticle)
 
 app.delete("/api/comments/:comment_id", deleteComment)
+
+app.get("/api/users", getUsers)
 
 // 400 error - invalid id
 app.use((err, req, res, next) => {
