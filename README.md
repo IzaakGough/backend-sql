@@ -1,6 +1,63 @@
+
+A hosted version of this project can be found here: https://northcoders-backend-project-z5pl.onrender.com
+
+# Summary
+
+This project is a simple resftul API which uses Node.js, PostgreSQL and both Supabase and Render for hosting.
 # Usage
 
-Create two .env files, namely .env.development and .env.test in the root directory.
-Add a single line PGDATABASE=nc_news and PGDATABASE=nc_news_test to these files respectively.
+Cloning this repo:
+
+    git clone https://github.com/IzaakGough/backend-sql.git 
+
+After this, ensure that you install all required dependencies with: 
+
+    npm install 
+
+To work with the database, you will need to first create two .env files, namely .env.development and .env.test in the root directory.
+Now, inside .env.development add the line:
+
+    PGDATABASE=nc_news
+
+and inside .env.test add:
+
+    PGDATABASE=nc_news_test
+
+To seed the database, you will need to run the following scripts which exist in the package-json:
+
+    npm run setup-dbs
+    npm run seed-dev
+    npm run test-seed
+
+
+Running tests:
+
+To run all tests on the project, simply run
+
+    npm t
+
+If you wish to only run tests in a particular test file, add its file path to the end of this command.
+
+
+# Dependencies
+
+This app requies both Node.js and PostgreSQL to be installed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
