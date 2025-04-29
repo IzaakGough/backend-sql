@@ -176,10 +176,11 @@ describe("POST /api/articles/:article_id/comments", () => {
     })
     .expect(201)
     .then(({body}) => {
-      expect(body).toEqual({
-        author: "butter_bridge",
-        body: "test comment..."
-      })
+      expect(body.comment_id).toBe(19)
+      expect(body.article_id).toBe(1)
+      expect(body.body).toBe("test comment...")
+      expect(body.votes).toBe(0)
+      expect(body.author).toBe("butter_bridge")
     })
   })
   test("404: Responds with error object when given a valid ID which is not in the database", () => {
@@ -191,7 +192,9 @@ describe("POST /api/articles/:article_id/comments", () => {
     })
     .expect(404)
     .then(({body}) => {
-      expect(body).toEqual({msg: "ID out of range"})
+      expect(body).toEqual({
+        status: 404,
+        msg: "ID does not exist"})
     })
   })
   test("400: Responds with error object when given an invalid ID", () => {
@@ -212,7 +215,7 @@ describe("POST /api/articles/:article_id/comments", () => {
     .send({})
     .expect(400)
     .then(({body}) => {
-      expect(body).toEqual({msg: "Bad request"})
+      expect(body).toEqual({msg: "Bad input body"})
     })
   })
   test("400: Responds with error object when given body with correct fields, but incorrect values", () => {
@@ -224,9 +227,21 @@ describe("POST /api/articles/:article_id/comments", () => {
     })
     .expect(400)
     .then(({body}) => {
-      expect(body).toEqual({msg: "Bad request"})
+      expect(body).toEqual({msg: "Bad input body"})
     })
   })
+  test("400: Responds with error object when username of comment is not in the database", () => {
+    return request(app)
+    .post("/api/articles/1/comments")
+    .send({
+      username: "izaak",
+      body: "test comment..."
+    })
+    .expect(400)
+    .then(({body}) => {
+      expect(body).toEqual({msg: "Bad input body"})
+    })
+})
 })
 
 describe("PATCH /api/articles/:article_id", () => {
@@ -294,7 +309,7 @@ describe("PATCH /api/articles/:article_id", () => {
     .send({inc_votes: 1})
     .expect(404)
     .then(({body}) => {
-      expect(body).toEqual({status: 404, msg: "Invalid ID"})
+      expect(body).toEqual({status: 404, msg: "Article does not exist"})
     })
   })
   test("400: Responds with error object when given an invalid ID", () => {
@@ -322,7 +337,7 @@ describe("DELETE /api/comments/:comment_id", () => {
     .delete("/api/comments/10000000")
     .expect(404)
     .then(({body}) => {
-      expect(body).toEqual({status: 404, msg: "Invalid ID"})
+      expect(body).toEqual({status: 404, msg: "Comment does not exist"})
     })
   })
   test("400: Responds with error object when given an invalid ID", () => {

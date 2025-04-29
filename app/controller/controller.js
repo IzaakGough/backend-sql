@@ -61,18 +61,13 @@ exports.getArticleComments = (req, res, next) => {
 exports.postArticleComment = (req, res, next) => {
     const {article_id} = req.params
     const {username, body} = req.body
-    if (!username || !body || !(typeof username === "string") || !(typeof body === "string")) {
-        res.status(400).send({msg: "Bad request"})
-    } else {
-        const created_at = new Date()
-        return insertArticleComment(article_id, username, created_at, body)
-        .then(({rows}) => {
-            res.status(201).send(rows[0])
-        })
-        .catch(err => {
-            next(err)
-        })
-    }
+    return insertArticleComment(article_id, username, body)
+    .then(({rows}) => {
+        res.status(201).send(rows[0])
+    })
+    .catch(err => {
+        next(err)
+    })
 }
 
 exports.patchArticle = (req, res, next) => {

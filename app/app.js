@@ -36,17 +36,24 @@ app.delete("/api/comments/:comment_id", deleteComment)
 
 app.get("/api/users", getUsers)
 
-// 400 error - invalid id
+// 400 error - bad request
 app.use((err, req, res, next) => {
     if (err.code === "22P02") {
         res.status(400).send({msg: "Bad request"})
     } else next(err);
 })
 
-// 400 error - id out of range
+// 400 error - Id does not exist 
 app.use((err, req, res, next) => {
     if (err.code === "23503") {
-        res.status(404).send({msg: "ID out of range"})
+        res.status(400).send({msg: "Bad input body"})
+    } else next(err);
+})
+
+// 400 error 
+app.use((err, req, res, next) => {
+    if (err.code === "23502") {
+        res.status(400).send({msg: "Bad input body"})
     } else next(err);
 })
 

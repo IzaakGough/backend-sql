@@ -130,16 +130,32 @@ exports.selectArticleComments = (id) => {
     })
 }
 
-exports.insertArticleComment = (id, username, created_at, body) => {
+exports.insertArticleComment = (id, username, body) => {
     return db.query(
         `
-        INSERT INTO comments
-        (article_id, author, created_at, body)
-        VALUES 
-        ($1, $2, $3, $4)
-        RETURNING author, body;
+        SELECT * FROM articles
+        WHERE article_id = $1;
         `
-    , [id, username, created_at, body])
+    , [id])
+    .then(({rows}) => {
+        if (!rows.length) {
+            return Promise.reject({
+                status: 404,
+                msg: "ID does not exist"
+            })
+        } else {
+            return db.query(
+                `
+                INSERT INTO comments
+                (article_id, author, body)
+                VALUES 
+                ($1, $2, $3)
+                RETURNING *;
+                `
+            , [id, username, body])
+        }
+    })
+
 }
 
 exports.updateArticle = (id, incVotes) => {
@@ -153,7 +169,7 @@ exports.updateArticle = (id, incVotes) => {
         if (!rows.length) {
             return Promise.reject({
                 status: 404,
-                msg: "Invalid ID"
+                msg: "Article does not exist"
             })
         } else {
             return db.query(
@@ -180,7 +196,7 @@ exports.deleteCommentRecord = (id) => {
         if (!rows.length) {
             return Promise.reject({
                 status: 404,
-                msg: "Invalid ID"
+                msg: "Comment does not exist"
             })
         } else {
             return rows
