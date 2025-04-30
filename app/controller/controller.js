@@ -144,7 +144,11 @@ exports.postArticle = (req, res, next) => {
     const article = req.body
     return insertArticle(article)
     .then(({rows}) => {
+        console.log(rows)
         res.status(201).send({postedArticle: rows[0]})
+    })
+    .catch(err => {
+        next(err)
     })
 }
 
@@ -153,5 +157,8 @@ exports.deleteArticle = (req, res, next) => {
     return deleteArticleRecord(article_id)
     .then(({rows}) => {
         res.status(204).send({})
+    })
+    .catch(err => {
+        next(err)
     })
 }

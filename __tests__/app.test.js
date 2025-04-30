@@ -575,11 +575,89 @@ describe("POST /api/articles", () => {
     return request(app)
     .post("/api/articles")
     .send({
-      author: "test_author",
+      author: "butter_bridge",
       title: "test_title",
       body: "test_body",
-      topic: "test_topic",
+      topic: "mitch",
       article_img_url: "test_url"
+    })
+    .expect(201)
+    .then(({body}) => {
+      expect(body.postedArticle.article_id).toBe(14)
+      expect(body.postedArticle.title).toBe("test_title")
+      expect(body.postedArticle.topic).toBe("mitch")
+      expect(body.postedArticle.author).toBe("butter_bridge")
+      expect(body.postedArticle.body).toBe("test_body")
+      expect(typeof body.postedArticle.created_at).toBe("string")
+      expect(body.postedArticle.votes).toBe(0)
+      expect(body.postedArticle.article_img_url).toBe("test_url")
+      expect(body.postedArticle.comment_count).toBe(0)
+    })
+  });
+  test("400: Responds with error object if input body missing any fields except url", () => {
+    return request(app)
+    .post("/api/articles")
+    .send({
+      author: "butter_bridge",
+      title: "test_title",
+      topic: "mitch",
+      article_img_url: "test_url"
+    })
+    .expect(400)
+    .then(({body}) => {
+      expect(body).toEqual({msg: "Bad input body"})
+    })
+  });
+  test("400: Responds with error object if given topic not in database", () => {
+    return request(app)
+    .post("/api/articles")
+    .send({
+      author: "butter_bridge",
+      title: "test_title",
+      body: "test_body",
+      topic: "cheese",
+      article_img_url: "test_url"
+    })
+    .expect(400)
+    .then(({body}) => {
+      expect(body).toEqual({msg: "Bad input body"})
+    })
+  });
+  test("400: Responds with error object if given author is not a user", () => {
+    return request(app)
+    .post("/api/articles")
+    .send({
+      author: "izaak",
+      title: "test_title",
+      body: "test_body",
+      topic: "mitch",
+      article_img_url: "test_url"
+    })
+    .expect(400)
+    .then(({body}) => {
+      expect(body).toEqual({msg: "Bad input body"})
+    })
+  });
+  test("201: Responds with posted article object with default img url when not provided", () => {
+    return request(app)
+    .post("/api/articles")
+    .send({
+      author: "butter_bridge",
+      title: "test_title",
+      body: "test_body",
+      topic: "mitch"
+    })
+    .expect(201)
+    .then(({body}) => {
+      expect(body.postedArticle.article_id).toBe(14)
+      expect(body.postedArticle.title).toBe("test_title")
+      expect(body.postedArticle.topic).toBe("mitch")
+      expect(body.postedArticle.author).toBe("butter_bridge")
+      expect(body.postedArticle.body).toBe("test_body")
+      expect(typeof body.postedArticle.created_at).toBe("string")
+      expect(body.postedArticle.votes).toBe(0)
+      expect(body.postedArticle.article_img_url).toBe("default_url")
+      expect(body.postedArticle.comment_count).toBe(0)
     })
   });
 });
