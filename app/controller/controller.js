@@ -44,7 +44,6 @@ exports.getArticles = (req, res, next) => {
     const queries = req.query
     return selectArticles(queries)
     .then(result => {
-        console.log(result)
         res.status(200).send({articles: result[0], total_count: result[1][0].total_count})
     })
     .catch(err => {

@@ -124,7 +124,7 @@ describe("GET /api/articles/:article_id/comments", () => {
     .get("/api/articles/1/comments")
     .expect(200)
     .then(({body}) => {
-      expect(body.comments.length).toBe(11)
+      expect(body.comments.length).toBe(10)
       body.comments.forEach(comment => {
         expect(typeof comment.comment_id).toBe("number")
         expect(typeof comment.votes).toBe("number")
@@ -663,50 +663,194 @@ describe("POST /api/articles", () => {
 });
 
 describe("GET /api/articles (pagination)", () => {
-  test("200: Responds with required articleswhen given limit and page queries", () => {
+  test("200: Responds with required articles when given limit and page queries (default sort, no filter)", () => {
     return request(app)
-    .get("/api/articles?limit=3&p=2")
+    .get("/api/articles?limit=3&p=1")
     .expect(200)
     .then(({body}) => {
       expect(body.total_count).toBe(13)
-      expect(body.articles).toEqual([
-        {
-          author: 'icellusedkars',
-          title: 'Sony Vaio; or, The Laptop',
-          article_id: 2,
-          topic: 'mitch',
-          created_at: "2020-10-16T05:03:00.000Z",
-          votes: 0,
-          article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700',
-          comment_count: 0
-        },
-        {
-          author: 'butter_bridge',
-          title: 'Another article about Mitch',
-          article_id: 13,
-          topic: 'mitch',
-          created_at: "2020-10-11T11:24:00.000Z",
-          votes: 0,
-          article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700',
-          comment_count: 0
-        },
-        {
-          author: 'butter_bridge',
-          title: 'Moustache',
-          article_id: 12,
-          topic: 'mitch',
-          created_at: "2020-10-11T11:24:00.000Z",
-          votes: 0,
-          article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700',
-          comment_count: 0
-        }
-      ])
+      expect(body.articles).toEqual(
+         [
+           {
+               "article_id": 13,
+             "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+              "author": "butter_bridge",
+               "comment_count": 0,
+               "created_at": "2020-10-11T11:24:00.000Z",
+               "title": "Another article about Mitch",
+               "topic": "mitch",
+               "votes": 0,
+             },
+              {
+               "article_id": 12,
+               "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+               "author": "butter_bridge",
+               "comment_count": 0,
+               "created_at": "2020-10-11T11:24:00.000Z",
+              "title": "Moustache",
+               "topic": "mitch",
+               "votes": 0,
+             },
+             {
+              "article_id": 5,
+               "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+               "author": "rogersop",
+               "comment_count": 2,
+               "created_at": "2020-08-03T13:14:00.000Z",
+               "title": "UNCOVERED: catspiracy to bring down democracy",
+               "topic": "cats",
+               "votes": 0,
+             },
+           ]
+      )
+    })
+  });
+  test("200: Responds with required articles when given limit and page queries (non-default sort, no filter)", () => {
+    return request(app)
+    .get("/api/articles?limit=3&p=1&sort_by=article_id&order=asc")
+    .expect(200)
+    .then(({body}) => {
+      expect(body.total_count).toBe(13)
+      expect(body.articles).toEqual(
+        [
+          {
+            "article_id": 4,
+            "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+            "author": "rogersop",
+            "comment_count": 0,
+            "created_at": "2020-05-06T01:14:00.000Z",
+            "title": "Student SUES Mitch!",
+            "topic": "mitch",
+            "votes": 0
+          },
+          {
+            "article_id": 5,
+            "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+            "author": "rogersop",
+            "comment_count": 2,
+            "created_at": "2020-08-03T13:14:00.000Z",
+            "title": "UNCOVERED: catspiracy to bring down democracy",
+            "topic": "cats",
+            "votes": 0
+          },
+          {
+            "article_id": 6,
+            "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+            "author": "icellusedkars",
+            "comment_count": 1,
+            "created_at": "2020-10-18T01:00:00.000Z",
+            "title": "A",
+            "topic": "mitch",
+            "votes": 0
+          }
+        ]
+      )
+    })
+  });
+  test("200: Responds with required articles when given limit and page (default sort, topic filter)", () => {
+    return request(app)
+    .get("/api/articles?limit=3&p=1&topic=mitch")
+    .expect(200)
+    .then(({body}) => {
+      expect(body.total_count).toBe(12)
+      expect(body.articles).toEqual(
+        [
+          {
+            "article_id": 12,
+            "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+            "author": "butter_bridge",
+            "comment_count": 0,
+            "created_at": "2020-10-11T11:24:00.000Z",
+            "title": "Moustache",
+            "topic": "mitch",
+            "votes": 0
+          },
+          {
+            "article_id": 13,
+            "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+            "author": "butter_bridge",
+            "comment_count": 0,
+            "created_at": "2020-10-11T11:24:00.000Z",
+            "title": "Another article about Mitch",
+            "topic": "mitch",
+            "votes": 0
+          },
+          {
+            "article_id": 1,
+            "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+            "author": "butter_bridge",
+            "comment_count": 11,
+            "created_at": "2020-07-09T20:11:00.000Z",
+            "title": "Living in the shadow of a great man",
+            "topic": "mitch",
+            "votes": 100
+          }
+        ]
+      )
+    })
+  });
+  test("200: Responds with required articles when given limit and page (non-default sort, topic filter)", () => {
+    return request(app)
+    .get("/api/articles?limit=3&p=1&sort_by=article_id&order=asc&topic=mitch")
+    .expect(200)
+    .then(({body}) => {
+      expect(body.total_count).toBe(12)
+      expect(body.articles).toEqual(
+        [
+          {
+            "article_id": 4,
+            "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+            "author": "rogersop",
+            "comment_count": 0,
+            "created_at": "2020-05-06T01:14:00.000Z",
+            "title": "Student SUES Mitch!",
+            "topic": "mitch",
+            "votes": 0
+          },
+          {
+            "article_id": 6,
+            "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+            "author": "icellusedkars",
+            "comment_count": 1,
+            "created_at": "2020-10-18T01:00:00.000Z",
+            "title": "A",
+            "topic": "mitch",
+            "votes": 0
+          },
+          {
+            "article_id": 7,
+            "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
+            "author": "icellusedkars",
+            "comment_count": 0,
+            "created_at": "2020-01-07T14:08:00.000Z",
+            "title": "Z",
+            "topic": "mitch",
+            "votes": 0
+          }
+        ]
+      )
+    })
+  });
+  test("400: Responds with error object if given invalid limit query", () => {
+    return request(app)
+    .get("/api/articles?limit=cheese")
+    .expect(400)
+    .then(({body}) => {
+      expect(body).toEqual({msg: "Bad request"})
+    })
+  });
+  test("400: Responds with error object if given invalid p query", () => {
+    return request(app)
+    .get("/api/articles?p=cheese")
+    .expect(400)
+    .then(({body}) => {
+      expect(body).toEqual({msg: "Bad request"})
     })
   });
 });
 
-describe.only("GET /api/articles/:article_id/comments (pagination)", () => {
-  test("200: Responds with required comments when given limit and page number", () => {
+describe("GET /api/articles/:article_id/comments (pagination)", () => {
+  test("200: Responds with required comments when given limit and page number (default sort, no filter)", () => {
     return request(app)
     .get("/api/articles/1/comments?limit=3&p=1")
     .expect(200)

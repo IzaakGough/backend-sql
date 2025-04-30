@@ -81,7 +81,7 @@ exports.selectArticles = (queries) => {
 
     const {limit = 10, p = 0} = queries
 
-    queryArr.push(limit, p)
+    queryArr.push(limit, p*limit)
 
     let articlesPromise
     let countPromise
