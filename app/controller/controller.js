@@ -11,7 +11,9 @@ const {
     deleteCommentRecord,
     selectUsers,
     selectUser,
-    updateComment
+    updateComment,
+    insertArticle,
+    deleteArticleRecord
 
 } = require("../model/model")
 
@@ -136,4 +138,20 @@ exports.patchComment = (req, res, next) => {
             next(err)
         })
     }
+}
+
+exports.postArticle = (req, res, next) => {
+    const article = req.body
+    return insertArticle(article)
+    .then(({rows}) => {
+        res.status(201).send({postedArticle: rows[0]})
+    })
+}
+
+exports.deleteArticle = (req, res, next) => {
+    const {article_id} = req.params
+    return deleteArticleRecord(article_id)
+    .then(({rows}) => {
+        res.status(204).send({})
+    })
 }

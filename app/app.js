@@ -13,7 +13,9 @@ const {
     deleteComment,
     getUsers,
     getUser,
-    patchComment
+    patchComment,
+    postArticle,
+    deleteArticle
 
 } = require("./controller/controller")
 
@@ -25,7 +27,11 @@ app.get("/api/topics", getTopics)
 
 app.get("/api/articles/:article_id", getArticle)
 
+app.delete("/api/articles/:article_id", deleteArticle)
+
 app.get("/api/articles", getArticles)
+
+app.post("/api/articles", postArticle)
 
 app.get("/api/articles/:article_id/comments", getArticleComments)
 

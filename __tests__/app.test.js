@@ -569,3 +569,56 @@ describe("PATCH /api/comments/:comment_id", () => {
     })
   })
 });
+
+describe("POST /api/articles", () => {
+  test("201: Responds with posted article object", () => {
+    return request(app)
+    .post("/api/articles")
+    .send({
+      author: "test_author",
+      title: "test_title",
+      body: "test_body",
+      topic: "test_topic",
+      article_img_url: "test_url"
+    })
+  });
+});
+
+describe.skip("GET /api/articles (pagination)", () => {
+  
+});
+
+describe.skip("GET /api/articles/:article_id (pagination)", () => {
+  
+});
+
+describe.skip("POST /api/topics", () => {
+  
+});
+
+describe("DELETE /api/articles/:article_id", () => {
+  test("204: Responds with no content", () => {
+    return request(app)
+    .delete("/api/articles/1")
+    .expect(204)
+    .then(({body}) => {
+      expect(body).toEqual({})
+    })
+  });
+  test("404: Responds with error object when given out of range ID", () => {
+    return request(app)
+    .delete("/api/articles/1000000")
+    .expect(404)
+    .then(({body}) => {
+      expect(body).toEqual({status: 404, msg: "Article does not exist"})
+    })
+  });
+  test("400: Responds with error object when given invalid ID", () => {
+    return request(app)
+    .delete("/api/articles/notAnId")
+    .expect(400)
+    .then(({body}) => {
+      expect(body).toEqual({msg: "Bad request"})
+    })
+  });
+});

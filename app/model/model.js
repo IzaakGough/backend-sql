@@ -284,6 +284,51 @@ exports.updateComment = (id, incVotes) => {
     })
 }
 
+exports.insertArticle = (article) => {
+
+}
+
+exports.deleteArticleRecord = (id) => {
+    return db.query(
+        `
+        SELECT * FROM articles
+        WHERE article_id = $1
+        `
+    , [id])
+    .then(({rows}) => {
+        if (!rows.length) {
+            return Promise.reject({
+                status: 404,
+                msg: "Article does not exist"
+            })
+        } else {
+            return db.query(
+                `
+                DELETE FROM comments
+                WHERE article_id = $1
+                RETURNING *;
+                `
+            , [id])
+            .then(({rows}) => {
+                return db.query(
+                    `
+                    DELETE FROM articles
+                    WHERE article_id = $1
+                    RETURNING *;
+                    `
+                , [id])
+            })
+        }
+    })
+
+
+
+
+
+
+
+}
+
 
 
 

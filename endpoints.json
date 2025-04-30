@@ -142,5 +142,21 @@
           "created_at": "2020-04-06T12:17:00.000Z"
       }
     }
+  },
+  "POST /api/articles" : {
+    "description": "posts a new article object",
+    "exampleResponse": {
+
+    }
+  },
+  "POST /api/topics" : {
+    "description": "posts a new topic object",
+    "exampleResponse": {
+
+    }
+  },
+  "DELETE /api/articles/:article_id" : {
+    "description": "deletes an article object by id",
+    "exampleResponse": {}
   }
 }
