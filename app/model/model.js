@@ -105,7 +105,6 @@ exports.selectArticles = (queries) => {
     }
 
     if (queries.topic) {
-        console.log(queries.topic)
         return db.query(
             `
             SELECT * FROM topics
@@ -113,21 +112,18 @@ exports.selectArticles = (queries) => {
             `
         , [queries.topic])
         .then(({rows}) => {
-            console.log(rows)
             if (!rows.length) {
                 return Promise.reject({status: 404, msg: "Topic does not exist"})
             } else {
                 queryArr.push(queries.topic)
                 queryStr += queryStrFirst + ` WHERE articles.topic = $1 ` + queryStrSecond
                 queryStr += `ORDER BY ${sort_by} ${order.toUpperCase()};`
-                console.log(queryStr)
                 return db.query(queryStr, queryArr)
             }
         })
     } else {
         queryStr += queryStrFirst + queryStrSecond
         queryStr += `ORDER BY ${sort_by} ${order.toUpperCase()};`
-        console.log(queryStr)
         return db.query(queryStr)
     }
 }

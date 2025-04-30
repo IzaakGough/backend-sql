@@ -29,7 +29,7 @@ exports.getArticle = (req, res, next) => {
     const {article_id} = req.params
     return selectArticle(article_id)
     .then(article => {
-        res.status(200).send(article)
+        res.status(200).send({article: article})
     })
     .catch(err => {
         next(err)
@@ -65,7 +65,7 @@ exports.postArticleComment = (req, res, next) => {
     const {username, body} = req.body
     return insertArticleComment(article_id, username, body)
     .then(({rows}) => {
-        res.status(201).send(rows[0])
+        res.status(201).send({postedComment: rows[0]})
     })
     .catch(err => {
         next(err)
@@ -80,7 +80,7 @@ exports.patchArticle = (req, res, next) => {
     } else {
         return updateArticle(article_id, inc_votes)
         .then(({rows}) => {
-            res.status(200).send(rows[0])
+            res.status(200).send({updatedArticle: rows[0]})
         })
         .catch(err => {
             next(err)

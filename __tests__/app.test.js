@@ -62,14 +62,14 @@ describe("GET /api/articles/:article_id", () => {
     .get("/api/articles/1")
     .expect(200)
     .then(({body}) => {
-      expect(body.author).toBe("butter_bridge")
-      expect(body.title).toBe("Living in the shadow of a great man")
-      expect(body.article_id).toBe(1)
-      expect(body.body).toBe("I find this existence challenging")
-      expect(body.topic).toBe("mitch")
-      expect(body.created_at).toBe("2020-07-09T20:11:00.000Z")
-      expect(body.votes).toBe(100)
-      expect(body.article_img_url).toBe(
+      expect(body.article.author).toBe("butter_bridge")
+      expect(body.article.title).toBe("Living in the shadow of a great man")
+      expect(body.article.article_id).toBe(1)
+      expect(body.article.body).toBe("I find this existence challenging")
+      expect(body.article.topic).toBe("mitch")
+      expect(body.article.created_at).toBe("2020-07-09T20:11:00.000Z")
+      expect(body.article.votes).toBe(100)
+      expect(body.article.article_img_url).toBe(
         "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
       )
     })
@@ -176,11 +176,11 @@ describe("POST /api/articles/:article_id/comments", () => {
     })
     .expect(201)
     .then(({body}) => {
-      expect(body.comment_id).toBe(19)
-      expect(body.article_id).toBe(1)
-      expect(body.body).toBe("test comment...")
-      expect(body.votes).toBe(0)
-      expect(body.author).toBe("butter_bridge")
+      expect(body.postedComment.comment_id).toBe(19)
+      expect(body.postedComment.article_id).toBe(1)
+      expect(body.postedComment.body).toBe("test comment...")
+      expect(body.postedComment.votes).toBe(0)
+      expect(body.postedComment.author).toBe("butter_bridge")
     })
   })
   test("404: Responds with error object when given a valid ID which is not in the database", () => {
@@ -251,7 +251,7 @@ describe("PATCH /api/articles/:article_id", () => {
     .send({inc_votes: 2})
     .expect(200)
     .then(({body}) => {
-      expect(body).toEqual( 
+      expect(body.updatedArticle).toEqual( 
         {
           article_id: 1,
           title: 'Living in the shadow of a great man',
@@ -271,7 +271,7 @@ describe("PATCH /api/articles/:article_id", () => {
     .send({inc_votes: -2})
     .expect(200)
     .then(({body}) => {
-      expect(body).toEqual( 
+      expect(body.updatedArticle).toEqual( 
         {
           article_id: 1,
           title: 'Living in the shadow of a great man',
@@ -484,17 +484,17 @@ describe("GET /api/articles/:article_id (comment_count)", () => {
     .get("/api/articles/1")
     .expect(200)
     .then(({body}) => {
-      expect(body.author).toBe("butter_bridge")
-      expect(body.title).toBe("Living in the shadow of a great man")
-      expect(body.article_id).toBe(1)
-      expect(body.body).toBe("I find this existence challenging")
-      expect(body.topic).toBe("mitch")
-      expect(body.created_at).toBe("2020-07-09T20:11:00.000Z")
-      expect(body.votes).toBe(100)
-      expect(body.article_img_url).toBe(
+      expect(body.article.author).toBe("butter_bridge")
+      expect(body.article.title).toBe("Living in the shadow of a great man")
+      expect(body.article.article_id).toBe(1)
+      expect(body.article.body).toBe("I find this existence challenging")
+      expect(body.article.topic).toBe("mitch")
+      expect(body.article.created_at).toBe("2020-07-09T20:11:00.000Z")
+      expect(body.article.votes).toBe(100)
+      expect(body.article.article_img_url).toBe(
         "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
       )
-      expect(body.comment_count).toBe(11)
+      expect(body.article.comment_count).toBe(11)
     })
   })
 })

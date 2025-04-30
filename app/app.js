@@ -17,7 +17,6 @@ const {
 
 app.use(express.json())
 
-
 app.get("/api", getDescription)
 
 app.get("/api/topics", getTopics)
@@ -64,7 +63,6 @@ app.use((err, req, res, next) => {
     } else next(err);
 })
 
-
 // 500 error
 app.use((err, req, res, next) => {
     console.log(err, "500 error log");
@@ -75,10 +73,6 @@ app.use((err, req, res, next) => {
 app.all(/(.*)/, (req, res) => {
     res.status(404).send({status: 404, msg: "Non-existent endpoint"})
 })
-
-
-
-
 
 module.exports = app
 
