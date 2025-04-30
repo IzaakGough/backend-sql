@@ -488,3 +488,27 @@ describe("GET /api/articles/:article_id (comment_count)", () => {
     })
   })
 })
+
+describe.only("GET /api/users/", () => {
+  test("200: Responds with user object corresponding to given username", () => {
+    return request(app)
+    .get("/api/users/butter_bridge")
+    .expect(200)
+    .then(({body}) => {
+      expect(body.user.username).toBe("butter_bridge")
+      expect(body.user.name).toBe("jonny")
+      expect(body.user.avatar_url).toBe("https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg")
+    })
+  });
+  test("404: Responds with error object when given username not in database", () => {
+    return request(app)
+    .get("/api/users/izaak")
+    .expect(404)
+    .expect(({body}) => {
+      expect(body).toEqual({
+        status: 404,
+        msg: "User does not exist"
+    })
+    })
+  });
+});

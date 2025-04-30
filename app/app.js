@@ -11,7 +11,8 @@ const {
     postArticleComment,
     patchArticle,
     deleteComment,
-    getUsers
+    getUsers,
+    getUser
 
 } = require("./controller/controller")
 
@@ -34,6 +35,8 @@ app.patch("/api/articles/:article_id", patchArticle)
 app.delete("/api/comments/:comment_id", deleteComment)
 
 app.get("/api/users", getUsers)
+
+app.get("/api/users/:username", getUser)
 
 // 400 error - bad request
 app.use((err, req, res, next) => {
