@@ -15,7 +15,8 @@ const {
     getUser,
     patchComment,
     postArticle,
-    deleteArticle
+    deleteArticle,
+    postTopic
 
 } = require("./controller/controller")
 
@@ -24,6 +25,8 @@ app.use(express.json())
 app.get("/api", getDescription)
 
 app.get("/api/topics", getTopics)
+
+app.post("/api/topics", postTopic)
 
 app.get("/api/articles/:article_id", getArticle)
 

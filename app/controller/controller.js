@@ -13,7 +13,8 @@ const {
     selectUser,
     updateComment,
     insertArticle,
-    deleteArticleRecord
+    deleteArticleRecord,
+    insertTopic
 
 } = require("../model/model")
 
@@ -41,14 +42,13 @@ exports.getArticle = (req, res, next) => {
 }
 
 exports.getArticles = (req, res, next) => {
-    const {sort_by, order, topic} = req.query
-    return selectArticles({sort_by, order, topic})
-    .then(({rows}) => {
-       
-        res.status(200).send({articles: rows})
+    const queries = req.query
+    return selectArticles(queries)
+    .then(result => {
+        console.log(result)
+        res.status(200).send({articles: result[0], total_count: result[1][0].total_count})
     })
     .catch(err => {
-        
         next(err)
     })
 }
@@ -144,7 +144,6 @@ exports.postArticle = (req, res, next) => {
     const article = req.body
     return insertArticle(article)
     .then(({rows}) => {
-        console.log(rows)
         res.status(201).send({postedArticle: rows[0]})
     })
     .catch(err => {
@@ -161,4 +160,7 @@ exports.deleteArticle = (req, res, next) => {
     .catch(err => {
         next(err)
     })
+}
+
+exports.postTopic = (req, res, next) => {
 }

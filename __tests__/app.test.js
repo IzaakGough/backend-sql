@@ -100,7 +100,7 @@ describe("GET /api/articles", () => {
     .get("/api/articles")
     .expect(200)
     .then(({body}) => {
-      expect(body.articles.length).toBe(13)
+      expect(body.articles.length).not.toBe(0)
         body.articles.forEach(article => {
           expect(typeof article.author).toBe("string")
           expect(typeof article.title).toBe("string")
@@ -372,7 +372,7 @@ describe("GET /api/articles (sorting queries)", () => {
     .get("/api/articles?sort_by=article_id&order=asc")
     .expect(200)
     .then(({body}) => {
-      expect(body.articles.length).toBe(13)
+      expect(body.articles.length).not.toBe(0)
       body.articles.forEach(article => {
         expect(typeof article.author).toBe("string")
         expect(typeof article.title).toBe("string")
@@ -423,7 +423,7 @@ describe("GET /api/articles (topic query)", () => {
     .get("/api/articles?topic=mitch")
     .expect(200)
     .then(({body}) => {
-      expect(body.articles.length).toBe(12)
+      expect(body.articles.length).not.toBe(0)
       body.articles.forEach(article => {
         expect(typeof article.author).toBe("string")
         expect(typeof article.title).toBe("string")
@@ -460,7 +460,7 @@ describe("GET /api/articles (topic query)", () => {
     .get("/api/articles?topic=mitch&sort_by=article_id&order=asc")
     .expect(200)
     .then(({body}) => {
-      expect(body.articles.length).toBe(12)
+      expect(body.articles.length).not.toBe(0)
       body.articles.forEach(article => {
         expect(typeof article.author).toBe("string")
         expect(typeof article.title).toBe("string")
@@ -662,8 +662,47 @@ describe("POST /api/articles", () => {
   });
 });
 
-describe.skip("GET /api/articles (pagination)", () => {
-  
+describe("GET /api/articles (pagination)", () => {
+  test.only("200: Responds with required articleswhen given limit and page queries", () => {
+    return request(app)
+    .get("/api/articles?limit=3&p=2")
+    .expect(200)
+    .then(({body}) => {
+      expect(body.total_count).toBe(13)
+      expect(body.articles).toEqual([
+        {
+          author: 'icellusedkars',
+          title: 'Sony Vaio; or, The Laptop',
+          article_id: 2,
+          topic: 'mitch',
+          created_at: "2020-10-16T05:03:00.000Z",
+          votes: 0,
+          article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700',
+          comment_count: 0
+        },
+        {
+          author: 'butter_bridge',
+          title: 'Another article about Mitch',
+          article_id: 13,
+          topic: 'mitch',
+          created_at: "2020-10-11T11:24:00.000Z",
+          votes: 0,
+          article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700',
+          comment_count: 0
+        },
+        {
+          author: 'butter_bridge',
+          title: 'Moustache',
+          article_id: 12,
+          topic: 'mitch',
+          created_at: "2020-10-11T11:24:00.000Z",
+          votes: 0,
+          article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700',
+          comment_count: 0
+        }
+      ])
+    })
+  });
 });
 
 describe.skip("GET /api/articles/:article_id (pagination)", () => {

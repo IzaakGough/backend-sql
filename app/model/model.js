@@ -38,11 +38,10 @@ exports.selectArticle = (id) => {
 }
 
 exports.selectArticles = (queries) => {
-
     let queryStr = ``
-
     let queryStrFirst = 
-    `SELECT articles.author,
+    `
+    SELECT articles.author,
     articles.title,
     articles.article_id,
     articles.topic,
@@ -64,11 +63,8 @@ exports.selectArticles = (queries) => {
         articles.votes,
         articles.article_img_url
         `
-
-
     const queryArr = []
     const validCols = 
-
     [
         "author",
         "title",
@@ -81,10 +77,15 @@ exports.selectArticles = (queries) => {
     ]
 
     const validOrders = ["ASC", "DESC"]
-
     let sort_by = "created_at"
     let order = "DESC"
 
+    const {limit = 10, p = 0} = queries
+
+    queryArr.push(limit, p)
+
+    let articlesPromise
+    let countPromise
 
     if (queries.sort_by && validCols.includes(queries.sort_by)) {
         sort_by = queries.sort_by
@@ -116,21 +117,36 @@ exports.selectArticles = (queries) => {
                 return Promise.reject({status: 404, msg: "Topic does not exist"})
             } else {
                 queryArr.push(queries.topic)
-                queryStr += queryStrFirst + ` WHERE articles.topic = $1 ` + queryStrSecond
-                queryStr += `ORDER BY ${sort_by} ${order.toUpperCase()};`
-                return db.query(queryStr, queryArr)
+                queryStr += queryStrFirst + ` WHERE articles.topic = $3 ` + queryStrSecond
+                queryStr += ` ORDER BY ${sort_by} ${order.toUpperCase()}`
+                queryStr += ` LIMIT $1 OFFSET $2;`
+                articlesPromise = db.query(queryStr, queryArr)
+                countPromise = db.query(
+                    `
+                    SELECT COUNT(*)::INT AS total_count
+                    FROM articles
+                    WHERE topic = $1;
+                    `
+                , [queries.topic])
+                return Promise.all([articlesPromise, countPromise])
+                .then(result => {
+                    return [result[0].rows, result[1].rows]
+                })
             }
         })
     } else {
         queryStr += queryStrFirst + queryStrSecond
-        queryStr += `ORDER BY ${sort_by} ${order.toUpperCase()};`
-        return db.query(queryStr)
+        queryStr += ` ORDER BY ${sort_by} ${order.toUpperCase()}`
+        queryStr += ` LIMIT $1 OFFSET $2;`
+        articlesPromise = db.query(queryStr, queryArr)
     }
+
+    countPromise = db.query( `SELECT COUNT(*)::INT AS total_count FROM articles;`)
+    return Promise.all([articlesPromise, countPromise])
+    .then(result => {
+        return [result[0].rows, result[1].rows]
+    })
 }
-
-
-
-
 
 exports.selectArticleComments = (id) => {
     return db.query(
