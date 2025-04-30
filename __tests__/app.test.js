@@ -663,7 +663,7 @@ describe("POST /api/articles", () => {
 });
 
 describe("GET /api/articles (pagination)", () => {
-  test.only("200: Responds with required articleswhen given limit and page queries", () => {
+  test("200: Responds with required articleswhen given limit and page queries", () => {
     return request(app)
     .get("/api/articles?limit=3&p=2")
     .expect(200)
@@ -709,8 +709,36 @@ describe.skip("GET /api/articles/:article_id (pagination)", () => {
   
 });
 
-describe.skip("POST /api/topics", () => {
-  
+describe.only("POST /api/topics", () => {
+  test("200: Reponds with posted topic", () => {
+    return request(app)
+    .post("/api/topics")
+    .send({
+      slug: "test_topic_name",
+      description: "test_topic_description"
+    })
+    .expect(200)
+    .then(({body}) => {
+      expect(body.postedTopic).toEqual(
+        {
+          description: "test_topic_description",
+          img_url: "",
+          slug: "test_topic_name"
+        }
+      )
+    })
+  });
+  test("400: Responds with error object if input body missing required fields", () => {
+    return request(app)
+    .post("/api/topics")
+    .send({
+      description: "test_topic_description"
+    })
+    .expect(400)
+    .then(({body}) => {
+      expect(body).toEqual({msg: "Bad input body"})
+    })
+  });
 });
 
 describe("DELETE /api/articles/:article_id", () => {

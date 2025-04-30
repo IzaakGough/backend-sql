@@ -1,5 +1,4 @@
 const db = require("../../db/connection")
-const { sort } = require("../../db/data/test-data/articles")
 
 
 exports.selectTopics = () => {
@@ -363,6 +362,19 @@ exports.deleteArticleRecord = (id) => {
             })
         }
     })
+}
+
+exports.insertTopic = (topic) => {
+    const {slug, description} = topic
+    return db.query(
+        `
+        INSERT INTO topics
+        (slug, description, img_url)
+        VALUES
+        ($1, $2, '')
+        RETURNING *;
+        `
+    , [slug, description])
 }
 
 

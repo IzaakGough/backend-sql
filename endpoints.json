@@ -162,7 +162,11 @@
   "POST /api/topics" : {
     "description": "posts a new topic object",
     "exampleResponse": {
-
+      "postedTopic" : {
+        "description": "test_topic_description",
+        "img_url": "",
+        "slug": "test_topic_name"
+      }
     }
   },
   "DELETE /api/articles/:article_id" : {

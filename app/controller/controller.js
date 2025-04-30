@@ -1,4 +1,3 @@
-
 const endpoints = require("../../endpoints.json")
 
 const {
@@ -163,4 +162,12 @@ exports.deleteArticle = (req, res, next) => {
 }
 
 exports.postTopic = (req, res, next) => {
+    const topic = req.body
+    return insertTopic(topic)
+    .then(({rows}) => {
+        res.status(200).send({postedTopic: rows[0]})
+    })
+    .catch(err => {
+        next(err)
+    })
 }
