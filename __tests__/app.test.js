@@ -849,8 +849,8 @@ describe("GET /api/articles (pagination)", () => {
   });
 });
 
-describe("GET /api/articles/:article_id/comments (pagination)", () => {
-  test("200: Responds with required comments when given limit and page number (default sort, no filter)", () => {
+describe.only("GET /api/articles/:article_id/comments (pagination)", () => {
+  test("200: Responds with required comments when given limit and page (default sort, no filter)", () => {
     return request(app)
     .get("/api/articles/1/comments?limit=3&p=1")
     .expect(200)
@@ -883,6 +883,22 @@ describe("GET /api/articles/:article_id/comments (pagination)", () => {
           }
         ]
       )
+    })
+  });
+  test("400: Responds with error object if given invalid limit query", () => {
+    return request(app)
+    .get("/api/articles/1/comments?limit=cheese")
+    .expect(400)
+    .then(({body}) => {
+      expect(body).toEqual({msg: "Bad request"})
+    })
+  });
+  test("400: Responds with error object if given invalid p query", () => {
+    return request(app)
+    .get("/api/articles/1/comments?p=cheese")
+    .expect(400)
+    .then(({body}) => {
+      expect(body).toEqual({msg: "Bad request"})
     })
   });
 });
