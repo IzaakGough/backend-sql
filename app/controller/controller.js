@@ -54,7 +54,8 @@ exports.getArticles = (req, res, next) => {
 
 exports.getArticleComments = (req, res, next) => {
     const {article_id} = req.params
-    return selectArticleComments(article_id)
+    const queries = req.query
+    return selectArticleComments(article_id, queries)
     .then(({rows}) => {
         res.status(200).send({comments: rows})
     })

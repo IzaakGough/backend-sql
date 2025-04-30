@@ -705,11 +705,45 @@ describe("GET /api/articles (pagination)", () => {
   });
 });
 
-describe.skip("GET /api/articles/:article_id (pagination)", () => {
-  
+describe.only("GET /api/articles/:article_id/comments (pagination)", () => {
+  test("200: Responds with required comments when given limit and page number", () => {
+    return request(app)
+    .get("/api/articles/1/comments?limit=3&p=1")
+    .expect(200)
+    .then(({body}) => {
+      expect(body.comments).toEqual(
+        [
+          {
+            "article_id": 1,
+            "author": "icellusedkars",
+            "body": "Fruit pastilles",
+            "comment_id": 13,
+            "created_at": "2020-06-15T10:25:00.000Z",
+            "votes": 0
+          },
+          {
+            "article_id": 1,
+            "author": "icellusedkars",
+            "body": "Lobster pot",
+            "comment_id": 7,
+            "created_at": "2020-05-15T20:19:00.000Z",
+            "votes": 0
+          },
+          {
+            "article_id": 1,
+            "author": "icellusedkars",
+            "body": "Delicious crackerbreads",
+            "comment_id": 8,
+            "created_at": "2020-04-14T20:19:00.000Z",
+            "votes": 0
+          }
+        ]
+      )
+    })
+  });
 });
 
-describe.only("POST /api/topics", () => {
+describe("POST /api/topics", () => {
   test("200: Reponds with posted topic", () => {
     return request(app)
     .post("/api/topics")

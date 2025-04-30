@@ -43,6 +43,7 @@
   },
   "GET /api/articles/:article_id/comments" : {
     "description": "serves an array of all comment objects corrseponding to the given article id",
+    "queries": ["limit", "p"],
     "exampleResponse": {
       "comments": [
         {

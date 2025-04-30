@@ -147,7 +147,8 @@ exports.selectArticles = (queries) => {
     })
 }
 
-exports.selectArticleComments = (id) => {
+exports.selectArticleComments = (id, queries) => {
+    const {limit = 10, p = 0} = queries
     return db.query(
         `
         SELECT * FROM articles
@@ -165,9 +166,11 @@ exports.selectArticleComments = (id) => {
                 `
                 SELECT * FROM comments
                 WHERE article_id = $1
-                ORDER BY created_at DESC;
+                ORDER BY created_at DESC
+                LIMIT $2 OFFSET $3
+                ;
                 `
-            , [id])
+            , [id, limit, p * limit])
         }
     })
 }
