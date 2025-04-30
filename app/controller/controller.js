@@ -10,7 +10,8 @@ const {
     updateArticle,
     deleteCommentRecord,
     selectUsers,
-    selectUser
+    selectUser,
+    updateComment
 
 } = require("../model/model")
 
@@ -121,3 +122,18 @@ exports.getUser = (req, res, next) => {
     })
 }
 
+exports.patchComment = (req, res, next) => {
+    const {comment_id} = req.params
+    const {inc_votes} = req.body
+    if (!inc_votes || !(typeof inc_votes === "number")) {
+        res.status(400).send({msg: "Bad request"})
+    } else {
+        return updateComment(comment_id, inc_votes)
+        .then(({rows}) => {
+            res.status(200).send({updatedComment: rows[0]})
+        })
+        .catch(err => {
+            next(err)
+        })
+    }
+}

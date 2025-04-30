@@ -489,7 +489,7 @@ describe("GET /api/articles/:article_id (comment_count)", () => {
   })
 })
 
-describe.only("GET /api/users/", () => {
+describe("GET /api/users/", () => {
   test("200: Responds with user object corresponding to given username", () => {
     return request(app)
     .get("/api/users/butter_bridge")
@@ -511,4 +511,61 @@ describe.only("GET /api/users/", () => {
     })
     })
   });
+});
+
+describe("PATCH /api/comments/:comment_id", () => {
+  test("200: Responds with ", () => {
+    return request(app)
+    .patch("/api/comments/1")
+    .send({inc_votes: 2})
+    .expect(200)
+    .then(({body}) => {
+      expect(body.updatedComment).toEqual(
+        {
+          comment_id: 1,
+          article_id: 9,
+          body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+          votes: 18,
+          author: 'butter_bridge',
+          created_at: "2020-04-06T12:17:00.000Z"
+        }
+      )
+    })
+  });
+  test("400: Responds with error object when body given has incorrect fields", () => {
+    return request(app)
+    .patch("/api/comments/1")
+    .send({})
+    .expect(400)
+    .then(({body}) => {
+      expect(body).toEqual({msg: "Bad request"})
+    })
+  })
+  test("400: Responds with error object when body given has incorrect value type", () => {
+    return request(app)
+    .patch("/api/comments/1")
+    .send({inc_votes: "one"})
+    .expect(400)
+    .then(({body}) => {
+      expect(body).toEqual({msg: "Bad request"})
+    })
+  })
+  test("404: Responds with error object when given a valid ID which is not in the database", () => {
+    return request(app)
+    .patch("/api/comments/10000000")
+    .send({inc_votes: 1})
+    .expect(404)
+    .then(({body}) => {
+      expect(body).toEqual({status: 404, msg: "Comment does not exist"})
+    })
+  })
+  test("400: Responds with error object when given an invalid ID", () => {
+    return request(app)
+    .patch("/api/comments/notAnId")
+    .send({inc_votes: 1})
+    .expect(400)
+    .then(({body}) => {
+      expect(body).toEqual({msg: "Bad request"})
+    })
+  })
 });
