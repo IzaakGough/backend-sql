@@ -1,55 +1,9 @@
 const express = require("express")
 const app = express();
 const db = require("../db/connection")
-
-const {
-    getDescription,
-    getTopics,
-    getArticle,
-    getArticles,
-    getArticleComments,
-    postArticleComment,
-    patchArticle,
-    deleteComment,
-    getUsers,
-    getUser,
-    patchComment,
-    postArticle,
-    deleteArticle,
-    postTopic
-
-} = require("./controller/controller")
-
+const apiRouter = require("../routes/api-router")
 app.use(express.json())
-
-app.get("/api", getDescription)
-
-app.get("/api/topics", getTopics)
-
-app.post("/api/topics", postTopic)
-
-app.get("/api/articles/:article_id", getArticle)
-
-app.delete("/api/articles/:article_id", deleteArticle)
-
-app.get("/api/articles", getArticles)
-
-app.post("/api/articles", postArticle)
-
-app.get("/api/articles/:article_id/comments", getArticleComments)
-
-app.post("/api/articles/:article_id/comments", postArticleComment)
-
-app.patch("/api/articles/:article_id", patchArticle)
-
-app.delete("/api/comments/:comment_id", deleteComment)
-
-app.patch("/api/comments/:comment_id", patchComment)
-
-app.get("/api/users", getUsers)
-
-app.get("/api/users/:username", getUser)
-
+app.use("/api", apiRouter)
 
 // 400 error - bad request
 app.use((err, req, res, next) => {

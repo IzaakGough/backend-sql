@@ -849,7 +849,7 @@ describe("GET /api/articles (pagination)", () => {
   });
 });
 
-describe.only("GET /api/articles/:article_id/comments (pagination)", () => {
+describe("GET /api/articles/:article_id/comments (pagination)", () => {
   test("200: Responds with required comments when given limit and page (default sort, no filter)", () => {
     return request(app)
     .get("/api/articles/1/comments?limit=3&p=1")
