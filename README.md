@@ -41,7 +41,7 @@ If you wish to only run tests in a particular test file, add its file path to th
 
 # Dependencies
 
-This app requies both Node.js and PostgreSQL to be installed.
+This app requies both Node.js (v23.7.0) and PostgreSQL (16.8) to be installed.
 
 
 
