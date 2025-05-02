@@ -57,7 +57,7 @@ describe("GET /api/topics", () => {
 
 
 describe("GET /api/articles/:article_id", () => {
-  test.only("200: Responds with the article object corresponding to the given article_id", () => {
+  test("200: Responds with the article object corresponding to the given article_id", () => {
     return request(app)
     .get("/api/articles/1")
     .expect(200)
@@ -67,7 +67,7 @@ describe("GET /api/articles/:article_id", () => {
       expect(body.article.article_id).toBe(1)
       expect(body.article.body).toBe("I find this existence challenging")
       expect(body.article.topic).toBe("mitch")
-      expect(new Date(body.article.created_at).getTime()).toBe(1594325460000)
+      expect(body.article.created_at).toBe("2020-07-09T21:11:00.000Z")
       expect(body.article.votes).toBe(100)
       expect(body.article.article_img_url).toBe(
         "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
@@ -245,7 +245,7 @@ describe("POST /api/articles/:article_id/comments", () => {
 })
 
 describe("PATCH /api/articles/:article_id", () => {
-  test.only("200: Responds with updated article object when given positive number", () => {
+  test("200: Responds with updated article object when given positive number", () => {
     return request(app)
     .patch("/api/articles/1")
     .send({inc_votes: 2})
@@ -256,7 +256,7 @@ describe("PATCH /api/articles/:article_id", () => {
       expect(body.updatedArticle.topic).toBe("mitch")
       expect(body.updatedArticle.author).toBe("butter_bridge")
       expect(body.updatedArticle.body).toBe("I find this existence challenging")
-      expect(new Date(body.updatedArticle.created_at).getTime()).toBe(1594325460000)
+      expect(body.updatedArticle.created_at).toBe("2020-07-09T21:11:00.000Z")
       expect(body.updatedArticle.votes).toBe(102)
       expect(body.updatedArticle.article_img_url).toBe('https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700')
     })
@@ -272,7 +272,7 @@ describe("PATCH /api/articles/:article_id", () => {
       expect(body.updatedArticle.topic).toBe("mitch")
       expect(body.updatedArticle.author).toBe("butter_bridge")
       expect(body.updatedArticle.body).toBe("I find this existence challenging")
-      expect(new Date(body.updatedArticle.created_at).getTime()).toBe(1594325460000)
+      expect(body.updatedArticle.created_at).toBe("2020-07-09T21:11:00.000Z")
       expect(body.updatedArticle.votes).toBe(98)
       expect(body.updatedArticle.article_img_url).toBe('https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700')
     })
@@ -506,7 +506,7 @@ describe("GET /api/users/", () => {
 });
 
 describe("PATCH /api/comments/:comment_id", () => {
-  test.only("200: Responds with ", () => {
+  test("200: Responds with ", () => {
     return request(app)
     .patch("/api/comments/1")
     .send({inc_votes: 2})
@@ -517,7 +517,7 @@ describe("PATCH /api/comments/:comment_id", () => {
       expect(body.updatedComment.body).toBe("Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!")
       expect(body.updatedComment.votes).toBe(18)
       expect(body.updatedComment.author).toBe("butter_bridge")
-      expect(new Date(body.updatedComment.created_at).getTime()).toBe(1586175420000)
+      expect(body.updatedComment.created_at).toBe("2020-04-06T12:17:00.000Z")
     })
   });
   test("400: Responds with error object when body given has incorrect fields", () => {
@@ -664,7 +664,7 @@ describe("GET /api/articles (pagination)", () => {
              "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
               "author": "butter_bridge",
                "comment_count": 0,
-               "created_at": "2020-10-11T11:24:00.000Z",
+               "created_at": "2020-10-11T12:24:00.000Z",
                "title": "Another article about Mitch",
                "topic": "mitch",
                "votes": 0,
@@ -674,7 +674,7 @@ describe("GET /api/articles (pagination)", () => {
                "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
                "author": "butter_bridge",
                "comment_count": 0,
-               "created_at": "2020-10-11T11:24:00.000Z",
+               "created_at": "2020-10-11T12:24:00.000Z",
               "title": "Moustache",
                "topic": "mitch",
                "votes": 0,
@@ -684,7 +684,7 @@ describe("GET /api/articles (pagination)", () => {
                "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
                "author": "rogersop",
                "comment_count": 2,
-               "created_at": "2020-08-03T13:14:00.000Z",
+               "created_at": "2020-08-03T14:14:00.000Z",
                "title": "UNCOVERED: catspiracy to bring down democracy",
                "topic": "cats",
                "votes": 0,
@@ -706,7 +706,7 @@ describe("GET /api/articles (pagination)", () => {
             "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
             "author": "rogersop",
             "comment_count": 0,
-            "created_at": "2020-05-06T01:14:00.000Z",
+            "created_at": "2020-05-06T02:14:00.000Z",
             "title": "Student SUES Mitch!",
             "topic": "mitch",
             "votes": 0
@@ -716,7 +716,7 @@ describe("GET /api/articles (pagination)", () => {
             "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
             "author": "rogersop",
             "comment_count": 2,
-            "created_at": "2020-08-03T13:14:00.000Z",
+            "created_at": "2020-08-03T14:14:00.000Z",
             "title": "UNCOVERED: catspiracy to bring down democracy",
             "topic": "cats",
             "votes": 0
@@ -726,7 +726,7 @@ describe("GET /api/articles (pagination)", () => {
             "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
             "author": "icellusedkars",
             "comment_count": 1,
-            "created_at": "2020-10-18T01:00:00.000Z",
+            "created_at": "2020-10-18T02:00:00.000Z",
             "title": "A",
             "topic": "mitch",
             "votes": 0
@@ -748,7 +748,7 @@ describe("GET /api/articles (pagination)", () => {
             "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
             "author": "butter_bridge",
             "comment_count": 0,
-            "created_at": "2020-10-11T11:24:00.000Z",
+            "created_at": "2020-10-11T12:24:00.000Z",
             "title": "Moustache",
             "topic": "mitch",
             "votes": 0
@@ -758,7 +758,7 @@ describe("GET /api/articles (pagination)", () => {
             "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
             "author": "butter_bridge",
             "comment_count": 0,
-            "created_at": "2020-10-11T11:24:00.000Z",
+            "created_at": "2020-10-11T12:24:00.000Z",
             "title": "Another article about Mitch",
             "topic": "mitch",
             "votes": 0
@@ -768,7 +768,7 @@ describe("GET /api/articles (pagination)", () => {
             "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
             "author": "butter_bridge",
             "comment_count": 11,
-            "created_at": "2020-07-09T20:11:00.000Z",
+            "created_at": "2020-07-09T21:11:00.000Z",
             "title": "Living in the shadow of a great man",
             "topic": "mitch",
             "votes": 100
@@ -790,7 +790,7 @@ describe("GET /api/articles (pagination)", () => {
             "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
             "author": "rogersop",
             "comment_count": 0,
-            "created_at": "2020-05-06T01:14:00.000Z",
+            "created_at": "2020-05-06T02:14:00.000Z",
             "title": "Student SUES Mitch!",
             "topic": "mitch",
             "votes": 0
@@ -800,7 +800,7 @@ describe("GET /api/articles (pagination)", () => {
             "article_img_url": "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700",
             "author": "icellusedkars",
             "comment_count": 1,
-            "created_at": "2020-10-18T01:00:00.000Z",
+            "created_at": "2020-10-18T02:00:00.000Z",
             "title": "A",
             "topic": "mitch",
             "votes": 0

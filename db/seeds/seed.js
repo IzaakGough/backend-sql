@@ -37,7 +37,7 @@ const seed = ({ topicData, userData, articleData, commentData }) => {
           topic VARCHAR(100) REFERENCES topics(slug),
           author VARCHAR(100) REFERENCES users(username),
           body TEXT NOT NULL,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
           votes INT DEFAULT 0,
           article_img_url VARCHAR(1000) NOT NULL
           )
