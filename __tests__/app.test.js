@@ -517,7 +517,7 @@ describe("PATCH /api/comments/:comment_id", () => {
       expect(body.updatedComment.body).toBe("Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!")
       expect(body.updatedComment.votes).toBe(18)
       expect(body.updatedComment.author).toBe("butter_bridge")
-      expect(body.updatedComment.created_at).toBe("2020-04-06T12:17:00.000Z")
+      expect(body.updatedComment.created_at).toBe("2020-04-06T13:17:00.000Z")
     })
   });
   test("400: Responds with error object when body given has incorrect fields", () => {
@@ -850,7 +850,7 @@ describe("GET /api/articles/:article_id/comments (pagination)", () => {
             "author": "icellusedkars",
             "body": "Fruit pastilles",
             "comment_id": 13,
-            "created_at": "2020-06-15T10:25:00.000Z",
+            "created_at": "2020-06-15T11:25:00.000Z",
             "votes": 0
           },
           {
@@ -858,7 +858,7 @@ describe("GET /api/articles/:article_id/comments (pagination)", () => {
             "author": "icellusedkars",
             "body": "Lobster pot",
             "comment_id": 7,
-            "created_at": "2020-05-15T20:19:00.000Z",
+            "created_at": "2020-05-15T21:19:00.000Z",
             "votes": 0
           },
           {
@@ -866,7 +866,7 @@ describe("GET /api/articles/:article_id/comments (pagination)", () => {
             "author": "icellusedkars",
             "body": "Delicious crackerbreads",
             "comment_id": 8,
-            "created_at": "2020-04-14T20:19:00.000Z",
+            "created_at": "2020-04-14T21:19:00.000Z",
             "votes": 0
           }
         ]

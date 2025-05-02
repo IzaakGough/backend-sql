@@ -188,7 +188,7 @@ exports.insertArticleComment = (id, username, body) => {
                 status: 404,
                 msg: "ID does not exist"
             })
-        } else {
+        } else {            
             return db.query(
                 `
                 INSERT INTO comments
