@@ -3,7 +3,8 @@ A hosted version of this project can be found here: https://northcoders-backend-
 
 # Summary
 
-This project is a simple resftul API which uses Node.js, PostgreSQL and both Supabase and Render for hosting.
+This project is a simple resftul API which uses Node.js, PostgreSQL and both Supabase and Render for hosting. 
+It is also makes use of a GitHub actions to continuously integrate any commits as long as tests are still passing.
 # Usage
 
 Cloning this repo:
