@@ -83,6 +83,7 @@ exports.patchArticle = (req, res, next) => {
     } else {
         return updateArticle(article_id, inc_votes)
         .then(({rows}) => {
+            console.log(rows[0])
             res.status(200).send({updatedArticle: rows[0]})
         })
         .catch(err => {

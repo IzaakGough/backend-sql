@@ -67,7 +67,7 @@ describe("GET /api/articles/:article_id", () => {
       expect(body.article.article_id).toBe(1)
       expect(body.article.body).toBe("I find this existence challenging")
       expect(body.article.topic).toBe("mitch")
-      expect(body.article.created_at).toBe("2020-07-09T20:11:00.000Z")
+      expect(new Date(body.article.created_at).toISOString()).toBe("2020-07-09T20:11:00.000Z")
       expect(body.article.votes).toBe(100)
       expect(body.article.article_img_url).toBe(
         "https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700"
@@ -251,18 +251,14 @@ describe("PATCH /api/articles/:article_id", () => {
     .send({inc_votes: 2})
     .expect(200)
     .then(({body}) => {
-      expect(body.updatedArticle).toEqual( 
-        {
-          article_id: 1,
-          title: 'Living in the shadow of a great man',
-          topic: 'mitch',
-          author: 'butter_bridge',
-          body: 'I find this existence challenging',
-          created_at: "2020-07-09T20:11:00.000Z",
-          votes: 102,
-          article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
-        }
-      )
+      expect(body.updatedArticle.article_id).toBe(1)
+      expect(body.updatedArticle.title).toBe("Living in the shadow of a great man")
+      expect(body.updatedArticle.topic).toBe("mitch")
+      expect(body.updatedArticle.author).toBe("butter_bridge")
+      expect(body.updatedArticle.body).toBe("I find this existence challenging")
+      expect(new Date(body.updatedArticle.created_at).toISOString()).toBe("2020-07-09T20:11:00.000Z")
+      expect(body.updatedArticle.votes).toBe(102)
+      expect(body.updatedArticle.article_img_url).toBe('https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700')
     })
   })
   test("200: Responds with updated article object when given negative number", () => {
@@ -271,18 +267,14 @@ describe("PATCH /api/articles/:article_id", () => {
     .send({inc_votes: -2})
     .expect(200)
     .then(({body}) => {
-      expect(body.updatedArticle).toEqual( 
-        {
-          article_id: 1,
-          title: 'Living in the shadow of a great man',
-          topic: 'mitch',
-          author: 'butter_bridge',
-          body: 'I find this existence challenging',
-          created_at: "2020-07-09T20:11:00.000Z",
-          votes: 98,
-          article_img_url: 'https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700'
-        }
-      )
+      expect(body.updatedArticle.article_id).toBe(1)
+      expect(body.updatedArticle.title).toBe("Living in the shadow of a great man")
+      expect(body.updatedArticle.topic).toBe("mitch")
+      expect(body.updatedArticle.author).toBe("butter_bridge")
+      expect(body.updatedArticle.body).toBe("I find this existence challenging")
+      expect(new Date(body.updatedArticle.created_at).toISOString()).toBe("2020-07-09T20:11:00.000Z")
+      expect(body.updatedArticle.votes).toBe(98)
+      expect(body.updatedArticle.article_img_url).toBe('https://images.pexels.com/photos/158651/news-newsletter-newspaper-information-158651.jpeg?w=700&h=700')
     })
   })
   test("400: Responds with error object when body given has incorrect fields", () => {
@@ -520,16 +512,12 @@ describe("PATCH /api/comments/:comment_id", () => {
     .send({inc_votes: 2})
     .expect(200)
     .then(({body}) => {
-      expect(body.updatedComment).toEqual(
-        {
-          comment_id: 1,
-          article_id: 9,
-          body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
-          votes: 18,
-          author: 'butter_bridge',
-          created_at: "2020-04-06T12:17:00.000Z"
-        }
-      )
+      expect(body.updatedComment.comment_id).toBe(1)
+      expect(body.updatedComment.article_id).toBe(9)
+      expect(body.updatedComment.body).toBe("Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!")
+      expect(body.updatedComment.votes).toBe(18)
+      expect(body.updatedComment.author).toBe("butter_bridge")
+      expect(new Date(body.updatedComment.created_at).toISOString()).toBe("2020-04-06T12:17:00.000Z")
     })
   });
   test("400: Responds with error object when body given has incorrect fields", () => {
