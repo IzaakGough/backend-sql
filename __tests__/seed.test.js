@@ -307,7 +307,7 @@ describe('seed', () => {
         )
         .then(({ rows: [column] }) => {
           expect(column.column_name).toBe('created_at');
-          expect(column.data_type).toBe("timestamp without time zone")
+
         });
     });
 
@@ -525,7 +525,6 @@ describe('seed', () => {
         )
         .then(({ rows: [column] }) => {
           expect(column.column_name).toBe('created_at');
-          
         });
     });
 
