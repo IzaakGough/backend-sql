@@ -22,10 +22,7 @@ exports.selectArticle = (id) => {
     .then(({rows}) => {
         const article = rows[0]
         if (!article) {
-            return Promise.reject({
-                status: 404,
-                msg: "Invalid ID"
-            })
+            return Promise.reject({status: 404, msg: "Invalid ID"})
         } else {
             return article
         }
@@ -143,10 +140,7 @@ exports.selectArticleComments = (id, queries) => {
     return db.query(`SELECT * FROM articles WHERE article_id = $1;`, [id])
     .then(({rows}) => {
         if (!rows.length) {
-            return Promise.reject({
-                status: 404,
-                msg: "Invalid ID"
-            })
+            return Promise.reject({status: 404, msg: "Invalid ID"})
         } else {
             return db.query(
                 `
@@ -165,10 +159,7 @@ exports.insertArticleComment = (id, username, body) => {
     return db.query(`SELECT * FROM articles WHERE article_id = $1;`, [id])
     .then(({rows}) => {
         if (!rows.length) {
-            return Promise.reject({
-                status: 404,
-                msg: "ID does not exist"
-            })
+            return Promise.reject({status: 404, msg: "ID does not exist"})
         } else {            
             return db.query(
                 `
@@ -188,10 +179,7 @@ exports.updateArticle = (id, incVotes) => {
     return db.query(`SELECT * FROM articles WHERE article_id = $1;`, [id])
     .then(({rows}) => {
         if (!rows.length) {
-            return Promise.reject({
-                status: 404,
-                msg: "Article does not exist"
-            })
+            return Promise.reject({status: 404, msg: "Article does not exist"})
         } else {
             return db.query(
                 `
@@ -215,10 +203,7 @@ exports.deleteCommentRecord = (id) => {
     , [id])
     .then(({rows}) => {
         if (!rows.length) {
-            return Promise.reject({
-                status: 404,
-                msg: "Comment does not exist"
-            })
+            return Promise.reject({status: 404, msg: "Comment does not exist"})
         } else {
             return rows
         }
@@ -233,10 +218,7 @@ exports.selectUser = (username) => {
     return db.query(`SELECT * FROM users WHERE username = $1;`, [username])
     .then(({rows}) => {
         if (!rows.length) {
-            return Promise.reject({
-                status: 404,
-                msg: "User does not exist"
-            })
+            return Promise.reject({status: 404, msg: "User does not exist"})
         } else {
             return rows
         }
@@ -247,10 +229,7 @@ exports.updateComment = (id, incVotes) => {
     return db.query(`SELECT * FROM comments WHERE comment_id = $1;`, [id])
     .then(({rows}) => {
         if (!rows.length) {
-            return Promise.reject({
-                status: 404,
-                msg: "Comment does not exist"
-            })
+            return Promise.reject({status: 404, msg: "Comment does not exist"})
         } else {
             return db.query(
                 `
@@ -299,10 +278,7 @@ exports.deleteArticleRecord = (id) => {
     return db.query(`SELECT * FROM articles WHERE article_id = $1`, [id])
     .then(({rows}) => {
         if (!rows.length) {
-            return Promise.reject({
-                status: 404,
-                msg: "Article does not exist"
-            })
+            return Promise.reject({status: 404, msg: "Article does not exist"})
         } else {
             return db.query(
                 `
