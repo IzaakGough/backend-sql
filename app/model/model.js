@@ -2,11 +2,7 @@ const db = require("../../db/connection")
 
 
 exports.selectTopics = () => {
-    return db.query(
-        `
-        SELECT slug, description FROM topics
-        ;`
-    )
+    return db.query(`SELECT slug, description FROM topics;`)
 }
 
 exports.selectArticle = (id) => {
@@ -105,12 +101,7 @@ exports.selectArticles = (queries) => {
     }
 
     if (queries.topic) {
-        return db.query(
-            `
-            SELECT * FROM topics
-            WHERE slug = $1
-            `
-        , [queries.topic])
+        return db.query(`SELECT * FROM topics WHERE slug = $1`, [queries.topic])
         .then(({rows}) => {
             if (!rows.length) {
                 return Promise.reject({status: 404, msg: "Topic does not exist"})
@@ -149,12 +140,7 @@ exports.selectArticles = (queries) => {
 
 exports.selectArticleComments = (id, queries) => {
     const {limit = 10, p = 0} = queries
-    return db.query(
-        `
-        SELECT * FROM articles
-        WHERE article_id = $1;
-        `
-    , [id])
+    return db.query(`SELECT * FROM articles WHERE article_id = $1;`, [id])
     .then(({rows}) => {
         if (!rows.length) {
             return Promise.reject({
@@ -176,12 +162,7 @@ exports.selectArticleComments = (id, queries) => {
 }
 
 exports.insertArticleComment = (id, username, body) => {
-    return db.query(
-        `
-        SELECT * FROM articles
-        WHERE article_id = $1;
-        `
-    , [id])
+    return db.query(`SELECT * FROM articles WHERE article_id = $1;`, [id])
     .then(({rows}) => {
         if (!rows.length) {
             return Promise.reject({
@@ -204,12 +185,7 @@ exports.insertArticleComment = (id, username, body) => {
 }
 
 exports.updateArticle = (id, incVotes) => {
-    return db.query(
-        `
-        SELECT * FROM articles
-        WHERE article_id = $1;
-        `
-    , [id])
+    return db.query(`SELECT * FROM articles WHERE article_id = $1;`, [id])
     .then(({rows}) => {
         if (!rows.length) {
             return Promise.reject({
@@ -250,20 +226,11 @@ exports.deleteCommentRecord = (id) => {
 }
 
 exports.selectUsers = () => {
-    return db.query(
-        `
-        SELECT * FROM users;
-        `
-    )
+    return db.query(`SELECT * FROM users;`)
 }
 
 exports.selectUser = (username) => {
-    return db.query(
-        `
-        SELECT * FROM users
-        WHERE username = $1;
-        `
-    , [username])
+    return db.query(`SELECT * FROM users WHERE username = $1;`, [username])
     .then(({rows}) => {
         if (!rows.length) {
             return Promise.reject({
@@ -277,12 +244,7 @@ exports.selectUser = (username) => {
 }
 
 exports.updateComment = (id, incVotes) => {
-    return db.query(
-        `
-        SELECT * FROM comments
-        WHERE comment_id = $1;
-        `
-    , [id])
+    return db.query(`SELECT * FROM comments WHERE comment_id = $1;`, [id])
     .then(({rows}) => {
         if (!rows.length) {
             return Promise.reject({
@@ -334,12 +296,7 @@ exports.insertArticle = (article) => {
 }
 
 exports.deleteArticleRecord = (id) => {
-    return db.query(
-        `
-        SELECT * FROM articles
-        WHERE article_id = $1
-        `
-    , [id])
+    return db.query(`SELECT * FROM articles WHERE article_id = $1`, [id])
     .then(({rows}) => {
         if (!rows.length) {
             return Promise.reject({
