@@ -2,7 +2,9 @@ const express = require("express")
 const app = express();
 const db = require("../db/connection")
 const apiRouter = require("../routes/api-router")
+const cors = require('cors');
 app.use(express.json())
+app.use(cors());
 app.use("/api", apiRouter)
 
 // 400 error - bad request
