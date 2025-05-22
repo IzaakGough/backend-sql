@@ -65,7 +65,8 @@ exports.selectArticles = (queries) => {
         "topic",
         "created_at",
         "votes",
-        "article_img_url"
+        "article_img_url",
+        "comment_count"
     ]
 
     const validOrders = ["ASC", "DESC"]
