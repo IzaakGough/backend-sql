@@ -12,7 +12,7 @@ Cloning this repo:
     git clone https://github.com/IzaakGough/backend-sql.git 
 
 After this, ensure that you install all required dependencies with: 
-
+    cd backend-sql
     npm install 
 
 To work with the database, you will need to first create two .env files, namely .env.development and .env.test in the root directory.
